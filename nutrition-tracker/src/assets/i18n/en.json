@@ -1,1 +1,30 @@
-{}
+{
+  "core": {
+    "components": {
+      "nutrition-facts": {
+        "TITLE": "Nutrition Facts",
+        "CALORIES": "Calories",
+        "TOTAL_FAT": "Total Fat",
+        "SATURATED_FAT": "Saturated Fat",
+        "TOTAL_CARBOHYDRATE": "Total Carbohydrate",
+        "SUGAR": "Sugars",
+        "PROTEIN": "Protein",
+        "SODIUM": "Sodium"
+      }
+    }
+  },
+  "pages": {
+    "tabs": {
+      "dashboard": {
+        "header": {
+          "TITLE": "Dashboard"
+        }
+      },
+      "history": {
+        "header": {
+          "TITLE": "History"
+        }
+      }
+    }
+  }
+}

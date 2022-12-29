@@ -1,11 +1,14 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [component]="this" [canGoBack]="false" [canSubmit]="false" title="pages.tabs.dashboard.header.TITLE">
+  <ion-button (click)="addPosition()"><ion-icon slot="icon-only" name="add-circle"></ion-icon></ion-button>
+</app-header>
 
 <ion-content [fullscreen]="true">
-  <app-content-wrapper>Test</app-content-wrapper>
+  <app-content-wrapper>
+    <app-nutrition-facts></app-nutrition-facts>
+
+    <ion-button expand="block" (click)="addPosition()"><ion-icon slot="icon-only"
+        name="add-circle"></ion-icon></ion-button>
+
+
+  </app-content-wrapper>
 </ion-content>
