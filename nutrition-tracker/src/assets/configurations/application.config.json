@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "translation": {
+    "languages": ["en", "de"],
+    "defaultLanguage": "en"
+  }
+}
