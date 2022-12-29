@@ -1,5 +1,5 @@
 import { Inject } from '@angular/core';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { HttpClient } from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
 import { map, Observable } from 'rxjs';

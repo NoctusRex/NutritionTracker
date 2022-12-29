@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { isEmpty } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import { Observable } from 'rxjs';
 import { SETTINGS_STORAGE_KEY } from '../consts/storage-keys.const';
 import { Settings } from '../models/settings.model';

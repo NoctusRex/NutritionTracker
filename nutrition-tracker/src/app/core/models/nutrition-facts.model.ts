@@ -1,3 +1,6 @@
+/**
+ * a 100 gram
+ */
 export interface NutritionFacts {
   calories: number;
   totalFat: number;
