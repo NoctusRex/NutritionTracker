@@ -7,6 +7,7 @@ import { ItemService } from 'src/app/core/services/item.service';
 import { concatMap, Observable } from 'rxjs';
 import { Item } from 'src/app/core/models/item.model';
 import { FoodModalPageComponent } from '../food/food-modal.page';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-select-food-modal-page',
@@ -55,7 +56,7 @@ export class SelectFoodModalPageComponent
     this.modalService
       .show$<Item>({
         component: FoodModalPageComponent,
-        componentProps: { item },
+        componentProps: { item: cloneDeep(item) },
       })
       .pipe(concatMap((item) => this.itemService.update$(item)))
       .subscribe();

@@ -6,8 +6,9 @@ import { ModalService } from 'src/app/core/services/modal.service';
 import { ItemService } from 'src/app/core/services/item.service';
 import { concatMap, map, Observable, of } from 'rxjs';
 import { Item } from 'src/app/core/models/item.model';
-import { cloneDeep, isEmpty } from 'lodash-es';
+import { clone, cloneDeep, isEmpty } from 'lodash-es';
 import { UnitOfMeasure } from 'src/app/core/models/unit-of-measure.model';
+import { FoodUnitModalPageComponent } from '../food-unit/food-unit-modal.page';
 
 @Component({
   selector: 'app-food-modal-page',
@@ -51,12 +52,32 @@ export class FoodModalPageComponent extends BaseComponent implements OnInit {
     this.modalService.dismiss(cloneDeep(this.item));
   }
 
-  openUnit(unit: UnitOfMeasure | null = null): void {
-    if (unit?.isBase) return;
-    // TODO
+  openUnit(unitOfMeasure: UnitOfMeasure | null = null): void {
+    if (unitOfMeasure?.isBase) return;
+
+    this.modalService
+      .show$<UnitOfMeasure>({
+        component: FoodUnitModalPageComponent,
+        componentProps: {
+          unitOfMeasure: cloneDeep(unitOfMeasure),
+          item: this.item,
+        },
+      })
+      .subscribe((unitOfMeasure) => {
+        const existingUnit = this.item.units.find(
+          (x) => x.id === unitOfMeasure.id
+        );
+        if (existingUnit) {
+          Object.assign(existingUnit, unitOfMeasure);
+        } else {
+          this.item.units.push(unitOfMeasure);
+        }
+      });
   }
 
-  removeUnit(unit: UnitOfMeasure): void {}
+  removeUnit(unit: UnitOfMeasure): void {
+    this.item.units = this.item.units.filter((x) => x.id !== unit.id);
+  }
 
   isValidChanged(event: any): void {
     this.areNutritionsValid = event;

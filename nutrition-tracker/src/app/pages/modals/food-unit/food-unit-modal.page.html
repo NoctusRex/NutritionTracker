@@ -1,0 +1,39 @@
+<app-header [component]="this" title="pages.modals.food-unit.header.TITLE" [disableSubmit]="!canSubmit()">
+</app-header>
+
+<ion-content>
+    <app-content-wrapper [padding]="2">
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>{{ "pages.modals.food-unit.content.UNIT_DATA_TITLE" | translate }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-grid class="ion-no-padding">
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" *ngIf="!isUnitValid()" color="danger"
+                                    name="alert-circle"></ion-icon>
+                                <ion-icon slot="start" *ngIf="isUnitValid()" color="success"
+                                    name="checkmark-circle"></ion-icon>
+                                <ion-icon slot="start" name="barbell"></ion-icon>
+                                <ion-input [(ngModel)]="unitOfMeasure.id" [disabled]="!isNewUnitOfMeasure"
+                                    [placeholder]="'pages.modals.food.content.UNIT_PLACEHOLDER' | translate"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-icon slot="start" *ngIf="!isFactorValid()" color="danger"
+                                    name="alert-circle"></ion-icon>
+                                <ion-icon slot="start" *ngIf="isFactorValid()" color="success"
+                                    name="checkmark-circle"></ion-icon>
+                                <ion-icon slot="start" name="link"></ion-icon>
+                                <ion-input [(ngModel)]="unitOfMeasure.factor"
+                                    [placeholder]="'pages.modals.food.content.FACTOR_PLACEHOLDER' | translate"></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+    </app-content-wrapper>
+</ion-content>
