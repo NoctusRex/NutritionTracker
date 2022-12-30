@@ -12,7 +12,6 @@ export class UnitOfMeasureUtilsService {
   ): Quantity {
     const sourceUnitOfMeasure = units.find((x) => x.id === quantity.unit);
     const targetUnitOfMeasure = units.find((x) => x.id === targetUnit);
-    const baseUnitOfMeasure = units.find((x) => x.isBase);
     if (!sourceUnitOfMeasure) {
       throw new Error(
         `The unit ${quantity.unit} was not found in the units ${units.join(
@@ -25,15 +24,8 @@ export class UnitOfMeasureUtilsService {
         `The unit ${targetUnit} was not found in the units ${units.join(',')}`
       );
     }
-    if (!baseUnitOfMeasure) {
-      throw new Error('Could not find base unit.');
-    }
 
-    if (sourceUnitOfMeasure.isBase) {
-      return quantity;
-    }
-
-    const quantityInBase = quantity.value * baseUnitOfMeasure.factor;
+    const quantityInBase = quantity.value * sourceUnitOfMeasure.factor;
     const quantityInTarget = quantityInBase * targetUnitOfMeasure.factor;
 
     return {

@@ -19,7 +19,7 @@
                                     name="checkmark-circle"></ion-icon>
                                 <ion-icon slot="start" name="barbell"></ion-icon>
                                 <ion-input [(ngModel)]="unitOfMeasure.id" [disabled]="!isNewUnitOfMeasure"
-                                    [placeholder]="'pages.modals.food.content.UNIT_PLACEHOLDER' | translate"></ion-input>
+                                    [placeholder]="'pages.modals.food-unit.content.UNIT_PLACEHOLDER' | translate"></ion-input>
                             </ion-item>
                             <ion-item>
                                 <ion-icon slot="start" *ngIf="!isFactorValid()" color="danger"
@@ -27,8 +27,10 @@
                                 <ion-icon slot="start" *ngIf="isFactorValid()" color="success"
                                     name="checkmark-circle"></ion-icon>
                                 <ion-icon slot="start" name="link"></ion-icon>
-                                <ion-input [(ngModel)]="unitOfMeasure.factor"
-                                    [placeholder]="'pages.modals.food.content.FACTOR_PLACEHOLDER' | translate"></ion-input>
+                                <ion-input [(ngModel)]="unitOfMeasure.factor" type="number"
+                                    [placeholder]="'pages.modals.food-unit.content.FACTOR_PLACEHOLDER' | translate"></ion-input>
+                                <ion-note slot="helper" *ngIf="unitOfMeasure.id">{{ getHelperNote$() |
+                                    async}}</ion-note>
                             </ion-item>
                         </ion-col>
                     </ion-row>

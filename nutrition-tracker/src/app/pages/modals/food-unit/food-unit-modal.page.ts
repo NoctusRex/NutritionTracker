@@ -8,6 +8,9 @@ import { concatMap, map, Observable, of } from 'rxjs';
 import { Item } from 'src/app/core/models/item.model';
 import { cloneDeep, isEmpty } from 'lodash-es';
 import { UnitOfMeasure } from 'src/app/core/models/unit-of-measure.model';
+import { Quantity } from 'src/app/core/models/quantity.model';
+import { UnitOfMeasureUtilsService } from 'src/app/core/services/unit-of-measure-utils.service';
+import { TranslationService } from 'src/app/core/services/translation.service';
 
 @Component({
   selector: 'app-food-unit-modal-page',
@@ -24,7 +27,9 @@ export class FoodUnitModalPageComponent
   constructor(
     router: Router,
     location: Location,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private unitOfMeasureUtils: UnitOfMeasureUtilsService,
+    private translationService: TranslationService
   ) {
     super(router, location);
   }
@@ -68,5 +73,25 @@ export class FoodUnitModalPageComponent
 
   isFactorValid(): boolean {
     return this.unitOfMeasure.factor > 0;
+  }
+
+  getHelperNote$(): Observable<string> {
+    return this.translationService
+      .translate$('pages.modals.food-unit.content.IS')
+      .pipe(
+        map((is) => {
+          const units = cloneDeep(this.item.units);
+          units.push(cloneDeep(this.unitOfMeasure));
+          const value = 100;
+          const baseUnit = this.item.units.find((x) => x.isBase)?.id!;
+          const quantity = this.unitOfMeasureUtils.convertTo(
+            { unit: baseUnit, value: value },
+            this.unitOfMeasure.id,
+            units
+          );
+
+          return `${value} ${baseUnit} ${is} ${quantity.value} ${quantity.unit}`;
+        })
+      );
   }
 }

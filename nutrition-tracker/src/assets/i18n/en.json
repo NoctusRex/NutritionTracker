@@ -50,6 +50,17 @@
           "DESCRIPTION_PLACEHOLDER": "Description",
           "ITEM_UNITS_TITLE": "Units"
         }
+      },
+      "food-unit": {
+        "header": {
+          "TITLE": "Additional Unit"
+        },
+        "content": {
+          "UNIT_DATA_TITLE": "Unit Facts",
+          "UNIT_PLACEHOLDER": "Unit",
+          "FACTOR_PLACEHOLDER": "Factor",
+          "IS": "is"
+        }
       }
     }
   }
