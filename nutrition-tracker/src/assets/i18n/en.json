@@ -61,6 +61,16 @@
           "FACTOR_PLACEHOLDER": "Factor",
           "IS": "is"
         }
+      },
+      "food-quantity": {
+        "header": {
+          "TITLE": "Quantity"
+        },
+        "content": {
+          "QUANTITY_DATA_TITLE": "Quantity Facts",
+          "IS": "is",
+          "QUANTITY_PLACEHOLDER": "Quantity"
+        }
       }
     }
   }

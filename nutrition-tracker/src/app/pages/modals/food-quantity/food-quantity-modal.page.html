@@ -1,0 +1,47 @@
+<app-header [component]="this" title="pages.modals.food-quantity.header.TITLE" [disableSubmit]="!canSubmit()">
+</app-header>
+
+<ion-content>
+    <app-content-wrapper [padding]="2">
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>{{ "pages.modals.food-quantity.content.QUANTITY_DATA_TITLE" | translate
+                    }}</ion-card-title>
+                <ion-item button detail="true" (click)="openItem()">
+                    <ion-icon slot="start" name="fast-food"></ion-icon>
+                    <ion-label>
+                        <h3>{{ position.item.id }}</h3>
+                        <p>{{ position.item.description }}</p>
+                    </ion-label>
+                </ion-item>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-grid class="ion-no-padding">
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="cart"></ion-icon>
+                                <ion-input type="number" [(ngModel)]="quantity"
+                                    [placeholder]="'pages.modals.food-quantity.content.QUANTITY_PLACEHOLDER' | translate"></ion-input>
+                            </ion-item>
+
+                            <ion-item>
+                                <ion-icon slot="start" name="barbell"></ion-icon>
+                                <ion-label></ion-label>
+                                <ion-select [(ngModel)]="unit" interface="popover">
+                                    <ion-select-option *ngFor="let unit of position.item.units" [value]="unit.id">{{
+                                        unit.id }}</ion-select-option>
+                                </ion-select>
+                                <ion-note slot="helper">{{ getHelperNote$() |
+                                    async}}</ion-note>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+
+        <app-nutrition-facts [nutritionFacts]="getNutritionFacts()"></app-nutrition-facts>
+    </app-content-wrapper>
+</ion-content>

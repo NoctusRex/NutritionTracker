@@ -4,6 +4,6 @@ import { Quantity } from './quantity.model';
 export interface ItemPosition {
   id: string;
   item: Item;
-  quantity: Quantity;
+  quantity?: Quantity;
   timeStampAdded: string;
 }

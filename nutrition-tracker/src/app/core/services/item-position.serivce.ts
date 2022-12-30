@@ -29,9 +29,11 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
       const item = value.item;
       const quantity =
         this.unitOfMeasureUtilsService.convertToBaseUnitOfMeasure(
-          value.quantity,
+          value.quantity!,
           item.units
         ).value;
+
+      if (Number.isNaN(quantity)) return;
 
       fact.calories! += (item.nutritionFacts.calories! / 100) * quantity;
       fact.protein! += (item.nutritionFacts.protein! / 100) * quantity;
