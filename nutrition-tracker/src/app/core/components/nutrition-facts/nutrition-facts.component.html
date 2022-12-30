@@ -3,12 +3,13 @@
         <ion-card-title>{{ "core.components.nutrition-facts.TITLE" | translate }}</ion-card-title>
     </ion-card-header>
 
-    <ion-card-content>
+    <ion-card-content *ngIf="!enableInput">
         <ion-grid class="ion-no-padding">
             <ion-row>
                 <ion-col>
                     <ion-item lines="full" color="medium">
-                        <ion-label><strong>Calories</strong></ion-label>
+                        <ion-label><strong>{{ "core.components.nutrition-facts.CALORIES" | translate
+                                }}</strong></ion-label>
                         <ion-label class="ion-text-end">{{ nutritionFacts?.calories }} kcal</ion-label>
                     </ion-item>
                 </ion-col>
@@ -56,6 +57,121 @@
                         <ion-label><strong>{{ "core.components.nutrition-facts.SODIUM" | translate
                                 }}</strong></ion-label>
                         <ion-label class="ion-text-end">{{ nutritionFacts?.sodium }} g</ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card-content>
+
+    <ion-card-content *ngIf="enableInput && nutritionFacts">
+        <ion-grid class="ion-no-padding">
+            <ion-row>
+                <ion-col>
+                    <ion-item lines="full" color="medium">
+                        <ion-label><strong>{{ "core.components.nutrition-facts.CALORIES" |
+                                translate }}</strong></ion-label>
+                        <ion-icon slot="start" *ngIf="!isCaloriesValid()" color="danger" name="alert-circle"></ion-icon>
+                        <ion-icon slot="start" *ngIf="isCaloriesValid()" color="success"
+                            name="checkmark-circle"></ion-icon>
+                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.calories"
+                            type="number"
+                            [placeholder]="'core.components.nutrition-facts.CALORIES' | translate"></ion-input>
+                        <ion-label class="ion-text-end">kcal</ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col color="medium">
+                    <ion-item lines="none" color="light">
+                        <ion-label><strong>{{ "core.components.nutrition-facts.TOTAL_FAT" |
+                                translate }}</strong></ion-label>
+                        <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.totalFat)" color="danger"
+                            name="alert-circle"></ion-icon>
+                        <ion-icon slot="start" *ngIf="isValueValid(nutritionFacts.totalFat)" color="success"
+                            name="checkmark-circle"></ion-icon>
+                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.totalFat"
+                            type="number"
+                            [placeholder]="'core.components.nutrition-facts.TOTAL_FAT' | translate"></ion-input>
+                        <ion-label class="ion-text-end">g</ion-label>
+                    </ion-item>
+                    <ion-item lines="full" color="light">
+                        <ion-label class="ion-padding-start">{{ "core.components.nutrition-facts.SATURATED_FAT" |
+                            translate }}</ion-label>
+                        <ion-icon slot="start"
+                            *ngIf="!isValueValid(nutritionFacts.saturatedFat, nutritionFacts.totalFat)" color="danger"
+                            name="alert-circle"></ion-icon>
+                        <ion-icon slot="start"
+                            *ngIf="isValueValid(nutritionFacts.saturatedFat, nutritionFacts.totalFat)" color="success"
+                            name="checkmark-circle"></ion-icon>
+                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.saturatedFat"
+                            type="number"
+                            [placeholder]="'core.components.nutrition-facts.SATURATED_FAT' | translate"></ion-input>
+                        <ion-label class="ion-text-end">g</ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col color="medium">
+                    <ion-item lines="none" color="medium">
+                        <ion-label><strong>{{
+                                "core.components.nutrition-facts.TOTAL_CARBOHYDRATE" |
+                                translate }}</strong></ion-label>
+                        <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.totalCarbohydrate)" color="danger"
+                            name="alert-circle"></ion-icon>
+                        <ion-icon slot="start" *ngIf="isValueValid(nutritionFacts.totalCarbohydrate)" color="success"
+                            name="checkmark-circle"></ion-icon>
+                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.totalCarbohydrate"
+                            type="number"
+                            [placeholder]="'core.components.nutrition-facts.TOTAL_CARBOHYDRATE' | translate"></ion-input>
+                        <ion-label class="ion-text-end">g</ion-label>
+                    </ion-item>
+                    <ion-item lines="full" color="medium">
+                        <ion-label class="ion-padding-start">{{ "core.components.nutrition-facts.SUGAR" |
+                            translate }}</ion-label>
+                        <ion-icon slot="start"
+                            *ngIf="!isValueValid(nutritionFacts.sugar, nutritionFacts.totalCarbohydrate)" color="danger"
+                            name="alert-circle"></ion-icon>
+                        <ion-icon slot="start"
+                            *ngIf="isValueValid(nutritionFacts.sugar, nutritionFacts.totalCarbohydrate)" color="success"
+                            name="checkmark-circle"></ion-icon>
+                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.sugar"
+                            type="number"
+                            [placeholder]="'core.components.nutrition-facts.SUGAR' | translate"></ion-input>
+                        <ion-label class="ion-text-end">g</ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item lines="full" color="light">
+                        <ion-label><strong>{{
+                                "core.components.nutrition-facts.PROTEIN" |
+                                translate }}</strong></ion-label>
+                        <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.protein)" color="danger"
+                            name="alert-circle"></ion-icon>
+                        <ion-icon slot="start" *ngIf="isValueValid(nutritionFacts.protein)" color="success"
+                            name="checkmark-circle"></ion-icon>
+                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.protein"
+                            type="number"
+                            [placeholder]="'core.components.nutrition-facts.PROTEIN' | translate"></ion-input>
+                        <ion-label class="ion-text-end">g</ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item lines="full" color="medium">
+                        <ion-label><strong>{{
+                                "core.components.nutrition-facts.SODIUM" |
+                                translate }}</strong></ion-label>
+                        <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.sodium)" color="danger"
+                            name="alert-circle"></ion-icon>
+                        <ion-icon slot="start" *ngIf="isValueValid(nutritionFacts.sodium)" color="success"
+                            name="checkmark-circle"></ion-icon>
+                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.sodium"
+                            type="number"
+                            [placeholder]="'core.components.nutrition-facts.SODIUM' | translate"></ion-input>
+                        <ion-label class="ion-text-end">g</ion-label>
                     </ion-item>
                 </ion-col>
             </ion-row>

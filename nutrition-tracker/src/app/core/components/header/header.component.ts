@@ -9,6 +9,7 @@ export class HeaderComponent {
   @Input() title!: string;
   @Input() canGoBack: boolean = true;
   @Input() canSubmit: boolean = true;
+  @Input() disableSubmit: boolean = false;
   @Input() submitIcon: string = 'save';
   @Input() component!: BaseComponent;
 }

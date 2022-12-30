@@ -1,0 +1,64 @@
+<app-header [component]="this" title="pages.modals.food.header.TITLE"
+    [disableSubmit]="(canSubmit$() | async) === false">
+    <ion-button (click)="openUnit()"><ion-icon slot="icon-only" name="barbell"></ion-icon></ion-button>
+</app-header>
+
+<ion-content>
+    <app-content-wrapper [padding]="2">
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>{{ "pages.modals.food.content.ITEM_DATA_TITLE" | translate }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-grid class="ion-no-padding">
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" *ngIf="(isItemValid$() | async) === false" color="danger"
+                                    name="alert-circle"></ion-icon>
+                                <ion-icon slot="start" *ngIf="(isItemValid$() | async)" color="success"
+                                    name="checkmark-circle"></ion-icon>
+                                <ion-icon slot="start" name="fast-food"></ion-icon>
+                                <ion-input [(ngModel)]="item.id" [disabled]="!isNewItem"
+                                    [placeholder]="'pages.modals.food.content.ITEM_PLACEHOLDER' | translate"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-icon slot="start" color="success" name="checkmark-circle"></ion-icon>
+                                <ion-icon slot="start" name="information-circle"></ion-icon>
+                                <ion-input [(ngModel)]="item.description"
+                                    [placeholder]="'pages.modals.food.content.DESCRIPTION_PLACEHOLDER' | translate"></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+
+        <app-nutrition-facts [nutritionFacts]="item.nutritionFacts" [enableInput]="true"
+            (isValid)="isValidChanged($event)"></app-nutrition-facts>
+
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>{{ "pages.modals.food.content.ITEM_UNITS_TITLE" | translate }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-list>
+                    <ion-item-sliding *ngFor="let unit of item.units">
+                        <ion-item button [detail]="!unit.isBase" (click)="openUnit(unit)">
+                            <ion-label>{{ unit.id }}</ion-label>
+                            <ion-label class="ion-text-end">{{ unit.factor }}</ion-label>
+                        </ion-item>
+
+                        <ion-item-options side="end" *ngIf="!unit.isBase">
+                            <ion-item-option color="danger" (click)="removeUnit(unit)">
+                                <ion-icon slot="icon-only" name="trash"></ion-icon>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </ion-list>
+            </ion-card-content>
+        </ion-card>
+    </app-content-wrapper>
+</ion-content>

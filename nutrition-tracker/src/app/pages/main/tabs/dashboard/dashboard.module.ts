@@ -6,6 +6,7 @@ import { DashboardPage } from './dashboard.page';
 
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 import { ComponentsModule } from 'src/app/core/components/component.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { ComponentsModule } from 'src/app/core/components/component.module';
     FormsModule,
     DashboardPageRoutingModule,
     ComponentsModule,
+    TranslateModule.forChild(),
   ],
   declarations: [DashboardPage],
 })

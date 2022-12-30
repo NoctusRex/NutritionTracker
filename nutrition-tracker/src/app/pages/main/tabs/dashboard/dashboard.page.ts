@@ -7,6 +7,8 @@ import { map, Observable } from 'rxjs';
 import { ItemPosition } from 'src/app/core/models/item-position.model';
 import { NutritionFacts } from 'src/app/core/models/nutrition-facts.model';
 import { UnitOfMeasureUtilsService } from 'src/app/core/services/unit-of-measure-utils.service';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { SelectFoodModalPageComponent } from 'src/app/pages/modals/select-food/select-food-modal.page';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +22,8 @@ export class DashboardPage extends BaseComponent implements OnInit {
     router: Router,
     location: Location,
     protected itemPositionService: ItemPositionService,
-    protected unitOfMeasureUtilsService: UnitOfMeasureUtilsService
+    protected unitOfMeasureUtilsService: UnitOfMeasureUtilsService,
+    private modalService: ModalService
   ) {
     super(router, location);
   }
@@ -30,41 +33,17 @@ export class DashboardPage extends BaseComponent implements OnInit {
 
     this.totalNutritionFacts$ = this.values$.pipe(
       map((values) => {
-        const fact: NutritionFacts = {
-          calories: 0,
-          protein: 0,
-          saturatedFat: 0,
-          sodium: 0,
-          sugar: 0,
-          totalCarbohydrate: 0,
-          totalFat: 0,
-        };
-
-        values.forEach((value) => {
-          const item = value.item;
-          const quantity =
-            this.unitOfMeasureUtilsService.convertToBaseUnitOfMeasure(
-              value.quantity,
-              item.units
-            ).value;
-
-          fact.calories += (item.nutritionFacts.calories / 100) * quantity;
-          fact.protein += (item.nutritionFacts.protein / 100) * quantity;
-          fact.saturatedFat +=
-            (item.nutritionFacts.saturatedFat / 100) * quantity;
-          fact.sodium += (item.nutritionFacts.sodium / 100) * quantity;
-          fact.sugar += (item.nutritionFacts.sugar / 100) * quantity;
-          fact.totalCarbohydrate +=
-            (item.nutritionFacts.totalCarbohydrate / 100) * quantity;
-          fact.totalFat += (item.nutritionFacts.totalFat / 100) * quantity;
-        });
-
-        return fact;
+        return this.itemPositionService.getTotal(values);
       })
     );
   }
 
-  addPosition(): void {}
+  addPosition(): void {
+    // TODO: quantity page
+    this.modalService
+      .show$({ component: SelectFoodModalPageComponent })
+      .subscribe();
+  }
 
   openPosition(position: ItemPosition): void {}
 

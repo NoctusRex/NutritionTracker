@@ -6,7 +6,7 @@
         "CALORIES": "Calories",
         "TOTAL_FAT": "Total Fat",
         "SATURATED_FAT": "Saturated Fat",
-        "TOTAL_CARBOHYDRATE": "Total Carbohydrate",
+        "TOTAL_CARBOHYDRATE": "Total Carb.",
         "SUGAR": "Sugars",
         "PROTEIN": "Protein",
         "SODIUM": "Sodium"
@@ -18,11 +18,37 @@
       "dashboard": {
         "header": {
           "TITLE": "Dashboard"
+        },
+        "content": {
+          "POSITION_TITLE": "Eaten Today"
         }
       },
       "history": {
         "header": {
           "TITLE": "History"
+        }
+      }
+    },
+    "modals": {
+      "select-food": {
+        "header": {
+          "TITLE": "Select Food"
+        },
+        "content": {
+          "FILTER_PLACEHOLDER": "Food name or description",
+          "NO_ITEMS_AVAILABLE": "There are no foods available.",
+          "NO_ITEMS_AVAILABLE_SUB_TEXT": "To add a food use the button on the top right."
+        }
+      },
+      "food": {
+        "header": {
+          "TITLE": "Food"
+        },
+        "content": {
+          "ITEM_DATA_TITLE": "Food Facts",
+          "ITEM_PLACEHOLDER": "Name",
+          "DESCRIPTION_PLACEHOLDER": "Description",
+          "ITEM_UNITS_TITLE": "Units"
         }
       }
     }

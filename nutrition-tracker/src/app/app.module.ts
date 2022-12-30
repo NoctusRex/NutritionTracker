@@ -10,8 +10,11 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { ApplicationConfigurationService } from './core/services/application-configuration.service';
 import { TranslationService } from './core/services/translation.service';
 import { forkJoin } from 'rxjs';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { SelectFoodModalPageComponent } from './pages/modals/select-food/select-food-modal.page';
+import { ComponentsModule } from './core/components/component.module';
+import { FoodModalPageComponent } from './pages/modals/food/food-modal.page';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient, baseHref: string) {
@@ -34,12 +37,17 @@ function initializeAppFactory(
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    SelectFoodModalPageComponent,
+    FoodModalPageComponent,
+  ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     TranslateModule.forRoot({
       loader: {
@@ -48,6 +56,7 @@ function initializeAppFactory(
         deps: [HttpClient, APP_BASE_HREF],
       },
     }),
+    ComponentsModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
