@@ -34,7 +34,7 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
   }
 
   get todaysValues$(): Observable<Array<ItemPosition>> {
-    return interval(1000).pipe(
+    return interval(50).pipe(
       concatMap(() => this.values$.pipe(take(1))),
       map((positions) => {
         const settings = this.getSettings();
@@ -44,6 +44,7 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
           const dayNow = now.day();
           const monthNow = now.month();
           const yearNow = now.year();
+          const hourNow = now.hour();
 
           const added = moment(x.timeStampAdded);
           const dayAdded = added.day();
@@ -51,12 +52,15 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
           const yearAdded = added.year();
           const hourAdded = added.hour() === 0 ? 24 : added.hour();
 
+          const hourWasYesterday = hourNow - hourAdded < 0;
+          const resetHour = settings.resetHour!;
+
           if (yearNow > yearAdded) return false;
           if (monthNow > monthAdded) return false;
-          if (dayNow > dayAdded) return false;
-          if (hourAdded < settings.resetHour!) return true;
+          // TODO: if (dayNow > dayAdded && !hourWasYesterday) return false;
+          // TODO: if (dayNow <= dayAdded && hourAdded > resetHour) return false;
 
-          return false;
+          return true;
         });
       })
     );
@@ -93,6 +97,14 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
         (item.nutritionFacts.totalCarbohydrate! / 100) * quantity;
       fact.totalFat! += (item.nutritionFacts.totalFat! / 100) * quantity;
     });
+
+    fact.calories = +fact.calories!.toFixed(3);
+    fact.protein = +fact.calories!.toFixed(3);
+    fact.saturatedFat = +fact.calories!.toFixed(3);
+    fact.sodium = +fact.calories!.toFixed(3);
+    fact.sugar = +fact.calories!.toFixed(3);
+    fact.totalCarbohydrate = +fact.calories!.toFixed(3);
+    fact.totalFat = +fact.calories!.toFixed(3);
 
     return fact;
   }
