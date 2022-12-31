@@ -25,8 +25,8 @@
             </div>
         </ng-template>
 
-        <ion-list *ngIf="((items$ | async)?.length ?? 0 > 0); else noValues">
-            <ion-item-sliding *ngFor="let item of items$ | async">
+        <ion-list *ngIf="(items?.length ?? 0 > 0); else noValues">
+            <ion-item-sliding *ngFor="let item of getFilteredItems()">
                 <ion-item detail="true" button (click)="selectItem(item)">
                     <ion-icon slot="start" name="fast-food"></ion-icon>
                     <ion-label>

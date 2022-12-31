@@ -12,7 +12,9 @@ export class ModalService {
     return from(this.modalController.create(opts)).pipe(
       concatMap((modal) => from(modal.present()).pipe(map(() => modal))),
       concatMap((modal) => from(modal.onWillDismiss())),
-      filter((result) => result.role !== 'cancel'),
+      filter((result) => {
+        return result.role !== 'cancel' && result.role !== 'backdrop';
+      }),
       map((result) => result.data as T)
     );
   }

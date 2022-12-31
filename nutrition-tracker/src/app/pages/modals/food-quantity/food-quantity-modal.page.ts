@@ -77,7 +77,15 @@ export class FoodQuantityModalPageComponent
         concatMap((item) => {
           this.position.item = item;
 
-          return this.itemService.update$(item);
+          return this.itemService.get$(item.id).pipe(
+            concatMap((existingItem) => {
+              if (existingItem) {
+                return this.itemService.update$(item);
+              }
+
+              return this.itemService.add$(item);
+            })
+          );
         })
       )
       .subscribe();

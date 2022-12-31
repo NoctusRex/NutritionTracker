@@ -4,10 +4,10 @@ import { BaseComponent } from 'src/app/core/components/base-component/base.compo
 import { Location } from '@angular/common';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { ItemService } from 'src/app/core/services/item.service';
-import { concatMap, Observable } from 'rxjs';
+import { concatMap, map, Observable } from 'rxjs';
 import { Item } from 'src/app/core/models/item.model';
 import { FoodModalPageComponent } from '../food/food-modal.page';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 
 @Component({
   selector: 'app-select-food-modal-page',
@@ -18,7 +18,7 @@ export class SelectFoodModalPageComponent
   implements OnInit
 {
   filterText: string = '';
-  items$!: Observable<Array<Item>>;
+  items!: Array<Item>;
 
   constructor(
     router: Router,
@@ -30,7 +30,18 @@ export class SelectFoodModalPageComponent
   }
 
   ngOnInit(): void {
-    this.items$ = this.itemService.values$;
+    this.itemService.values$.subscribe((x) => (this.items = x));
+  }
+
+  getFilteredItems(): Array<Item> {
+    return this.items.filter((item) => {
+      if (isEmpty(this.filterText)) return true;
+
+      return (
+        item.id.includes(this.filterText) ||
+        item.description.includes(this.filterText)
+      );
+    });
   }
 
   override goBack(): void {
