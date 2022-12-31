@@ -1,0 +1,31 @@
+<app-header [component]="this" [canSubmit]="false" title="pages.settings.header.TITLE"></app-header>
+
+<ion-content [fullscreen]="true">
+  <app-content-wrapper>
+    <ion-card>
+      <ion-card-header>
+        <ion-item>
+          <ion-label>
+            <h1>{{ "pages.settings.content.SETTINGS_TITLE" | translate }}</h1>
+          </ion-label>
+        </ion-item>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-label> {{ 'pages.settings.content.LANGUAGE' | translate }} </ion-label>
+          <ion-select [(ngModel)]="language" interface="popover" (ionChange)="onLanguageChange($event)">
+            <ion-select-option *ngFor="let l of languages" [value]="l">{{ l }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label> {{ 'pages.settings.content.RESET_TIME' | translate }} </ion-label>
+          <ion-select [(ngModel)]="hour" interface="popover" (ionChange)="onHourChange($event)">
+            <ion-select-option *ngFor="let h of hours" [value]="h">{{ h }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </app-content-wrapper>
+</ion-content>

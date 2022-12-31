@@ -12,6 +12,7 @@ import { SelectFoodModalPageComponent } from 'src/app/pages/modals/select-food/s
 import { FoodQuantityModalPageComponent } from 'src/app/pages/modals/food-quantity/food-quantity-modal.page';
 import { Item } from 'src/app/core/models/item.model';
 import { cloneDeep } from 'lodash';
+import moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +33,7 @@ export class DashboardPage extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.values$ = this.itemPositionService.values$;
+    this.values$ = this.itemPositionService.todaysValues$;
 
     this.totalNutritionFacts$ = this.values$.pipe(
       map((values) => {
@@ -50,7 +51,7 @@ export class DashboardPage extends BaseComponent implements OnInit {
             id: `${Date.now()}`,
             item,
             quantity: undefined,
-            timeStampAdded: Date.now.toString(),
+            timeStampAdded: moment().toISOString(true),
           })
         ),
         concatMap((position) => {
@@ -75,5 +76,9 @@ export class DashboardPage extends BaseComponent implements OnInit {
 
   removePosition(position: ItemPosition): void {
     this.itemPositionService.remove$(position).subscribe();
+  }
+
+  openSettings(): void {
+    this.navigate('settings');
   }
 }

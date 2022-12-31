@@ -72,6 +72,16 @@
           "QUANTITY_PLACEHOLDER": "Quantity"
         }
       }
+    },
+    "settings": {
+      "header": {
+        "TITLE": "Settings"
+      },
+      "content": {
+        "SETTINGS_TITLE": "Settings",
+        "LANGUAGE": "Language",
+        "RESET_TIME": "Today Eaten Reset Hour"
+      }
     }
   }
 }

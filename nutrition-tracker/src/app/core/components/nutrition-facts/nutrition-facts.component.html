@@ -1,6 +1,10 @@
 <ion-card>
     <ion-card-header>
-        <ion-card-title>{{ "core.components.nutrition-facts.TITLE" | translate }}</ion-card-title>
+        <ion-item>
+            <ion-label>
+                <h1>{{ "core.components.nutrition-facts.TITLE" | translate }}</h1>
+            </ion-label>
+        </ion-item>
     </ion-card-header>
 
     <ion-card-content *ngIf="!enableInput">

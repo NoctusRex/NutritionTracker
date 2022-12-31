@@ -1,5 +1,5 @@
 <app-header [component]="this" [canGoBack]="false" [canSubmit]="false" title="pages.tabs.dashboard.header.TITLE">
-  <ion-button (click)="addPosition()"><ion-icon slot="icon-only" name="add-circle"></ion-icon></ion-button>
+  <ion-button (click)="openSettings()"><ion-icon slot="icon-only" name="settings"></ion-icon></ion-button>
 </app-header>
 
 <ion-content [fullscreen]="true">
@@ -8,7 +8,11 @@
 
     <ion-card>
       <ion-card-header>
-        <ion-card-title>{{ "pages.tabs.dashboard.content.POSITION_TITLE" | translate }}</ion-card-title>
+        <ion-item button detail="true" (click)="addPosition()" detail-icon="add-circle">
+          <ion-label>
+            <h1>{{ "pages.tabs.dashboard.content.POSITION_TITLE" | translate }}</h1>
+          </ion-label>
+        </ion-item>
       </ion-card-header>
 
       <ion-card-content>

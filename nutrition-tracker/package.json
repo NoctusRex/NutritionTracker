@@ -30,6 +30,7 @@
     "@types/pouchdb": "^6.4.0",
     "ionicons": "^6.0.3",
     "lodash-es": "^4.17.21",
+    "moment": "^2.29.4",
     "ngx-translate": "github:ngx-translate/core",
     "pouchdb": "^8.0.0",
     "rxjs": "~7.5.0",

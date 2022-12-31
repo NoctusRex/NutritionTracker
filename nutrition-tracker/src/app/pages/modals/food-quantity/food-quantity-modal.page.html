@@ -5,8 +5,12 @@
     <app-content-wrapper [padding]="2">
         <ion-card>
             <ion-card-header>
-                <ion-card-title>{{ "pages.modals.food-quantity.content.QUANTITY_DATA_TITLE" | translate
-                    }}</ion-card-title>
+                <ion-item>
+                    <ion-label>
+                        <h1>{{ "pages.modals.food-quantity.content.QUANTITY_DATA_TITLE" | translate
+                            }}</h1>
+                    </ion-label>
+                </ion-item>
                 <ion-item button detail="true" (click)="openItem()">
                     <ion-icon slot="start" name="fast-food"></ion-icon>
                     <ion-label>
