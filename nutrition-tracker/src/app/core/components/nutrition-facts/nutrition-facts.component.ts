@@ -14,6 +14,7 @@ export class NutritionFactsComponent {
     sugar: undefined,
     totalCarbohydrate: undefined,
     totalFat: undefined,
+    fiber: undefined,
   };
   @Input() enableInput: boolean = false;
   @Output() isValid = new EventEmitter<boolean>();
@@ -75,7 +76,8 @@ export class NutritionFactsComponent {
         this.nutritionFacts?.sugar,
         this.nutritionFacts?.totalCarbohydrate,
         false
-      );
+      ) &&
+      this.isValueValid(this.nutritionFacts?.fiber, undefined, false);
 
     this.isValid.emit(valid);
   }

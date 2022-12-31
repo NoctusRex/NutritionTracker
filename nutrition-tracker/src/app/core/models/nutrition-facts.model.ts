@@ -9,4 +9,5 @@ export interface NutritionFacts {
   sugar?: number;
   protein?: number;
   sodium?: number;
+  fiber?: number;
 }

@@ -58,6 +58,15 @@
             <ion-row>
                 <ion-col>
                     <ion-item lines="full" color="medium">
+                        <ion-label><strong>{{ "core.components.nutrition-facts.FIBER" | translate
+                                }}</strong></ion-label>
+                        <ion-label class="ion-text-end">{{ nutritionFacts?.fiber }} g</ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item lines="full" color="light">
                         <ion-label><strong>{{ "core.components.nutrition-facts.SODIUM" | translate
                                 }}</strong></ion-label>
                         <ion-label class="ion-text-end">{{ nutritionFacts?.sodium }} g</ion-label>
@@ -166,6 +175,23 @@
                 <ion-col>
                     <ion-item lines="full" color="medium">
                         <ion-label><strong>{{
+                                "core.components.nutrition-facts.FIBER" |
+                                translate }}</strong></ion-label>
+                        <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.fiber)" color="danger"
+                            name="alert-circle"></ion-icon>
+                        <ion-icon slot="start" *ngIf="isValueValid(nutritionFacts.fiber)" color="success"
+                            name="checkmark-circle"></ion-icon>
+                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.fiber"
+                            type="number"
+                            [placeholder]="'core.components.nutrition-facts.FIBER' | translate"></ion-input>
+                        <ion-label class="ion-text-end">g</ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item lines="full" color="light">
+                        <ion-label><strong>{{
                                 "core.components.nutrition-facts.SODIUM" |
                                 translate }}</strong></ion-label>
                         <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.sodium)" color="danger"
@@ -179,6 +205,7 @@
                     </ion-item>
                 </ion-col>
             </ion-row>
+
         </ion-grid>
     </ion-card-content>
 </ion-card>

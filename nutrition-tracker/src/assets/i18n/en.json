@@ -9,7 +9,8 @@
         "TOTAL_CARBOHYDRATE": "Total Carb.",
         "SUGAR": "Sugars",
         "PROTEIN": "Protein",
-        "SODIUM": "Sodium"
+        "SODIUM": "Sodium",
+        "FIBER": "Fiber"
       }
     }
   },

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { add } from 'lodash';
+import { add, values } from 'lodash';
 import moment from 'moment';
 import {
   concatMap,
@@ -75,6 +75,7 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
       sugar: 0,
       totalCarbohydrate: 0,
       totalFat: 0,
+      fiber: 0,
     };
 
     positions.forEach((value) => {
@@ -96,15 +97,17 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
       fact.totalCarbohydrate! +=
         (item.nutritionFacts.totalCarbohydrate! / 100) * quantity;
       fact.totalFat! += (item.nutritionFacts.totalFat! / 100) * quantity;
+      fact.fiber! += (item.nutritionFacts.fiber! / 100) * quantity;
     });
 
     fact.calories = +fact.calories!.toFixed(3);
-    fact.protein = +fact.calories!.toFixed(3);
-    fact.saturatedFat = +fact.calories!.toFixed(3);
-    fact.sodium = +fact.calories!.toFixed(3);
-    fact.sugar = +fact.calories!.toFixed(3);
-    fact.totalCarbohydrate = +fact.calories!.toFixed(3);
-    fact.totalFat = +fact.calories!.toFixed(3);
+    fact.protein = +fact.protein!.toFixed(3);
+    fact.saturatedFat = +fact.saturatedFat!.toFixed(3);
+    fact.sodium = +fact.sodium!.toFixed(3);
+    fact.sugar = +fact.sugar!.toFixed(3);
+    fact.totalCarbohydrate = +fact.totalCarbohydrate!.toFixed(3);
+    fact.totalFat = +fact.totalFat!.toFixed(3);
+    fact.fiber = +fact.fiber!.toFixed(3);
 
     return fact;
   }
