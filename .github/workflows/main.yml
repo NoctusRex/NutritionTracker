@@ -1,0 +1,64 @@
+name: Build Android
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11.0
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: Install Capacitor
+        run: npm install -g capacitor @capacitor/core @capacitor/cli
+
+      - name: Install Ionic
+        run: npm install -g @ionic/cli
+
+      - name: Install app dependencies
+        working-directory: ./
+        run: npm install
+
+      - name: Convert Windows line endings to Linux from the gradlew file
+        working-directory: ./
+        run: sudo apt update && sudo apt install dos2unix && cd android && dos2unix ./gradlew && cd ..
+
+      - name: Make ./gradlew command executable
+        working-directory: ./
+        run: cd android && chmod +x ./gradlew && cd ..
+
+      - name: Build Ionic App
+        working-directory: ./
+        run: ionic build
+
+      - name: Copy Android
+        working-directory: ./
+        run: ionic capacitor copy android
+
+      - name: Sync Android
+        working-directory: ./
+        run: ionic capacitor sync android
+
+      - name: Build Android APK
+        working-directory: ./
+        run: cd android && ./gradlew assembleDebug && cd ..
+
+      - name: Upload generated APK to Github
+        uses: actions/upload-artifact@v1
+        with:
+          name: app-dev
+          path: ./android/app/build/outputs/apk/debug/app-debug.apk
