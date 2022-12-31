@@ -30,31 +30,31 @@ jobs:
         run: npm install -g @ionic/cli
 
       - name: Install app dependencies
-        working-directory: ./
+        working-directory: ./nutrition-tracker/
         run: npm install
 
       - name: Convert Windows line endings to Linux from the gradlew file
-        working-directory: ./
+        working-directory: ./nutrition-tracker/
         run: sudo apt update && sudo apt install dos2unix && cd android && dos2unix ./gradlew && cd ..
 
       - name: Make ./gradlew command executable
-        working-directory: ./
+        working-directory: ./nutrition-tracker/
         run: cd android && chmod +x ./gradlew && cd ..
 
       - name: Build Ionic App
-        working-directory: ./
+        working-directory: ./nutrition-tracker/
         run: ionic build
 
       - name: Copy Android
-        working-directory: ./
+        working-directory: ./nutrition-tracker/
         run: ionic capacitor copy android
 
       - name: Sync Android
-        working-directory: ./
+        working-directory: ./nutrition-tracker/
         run: ionic capacitor sync android
 
       - name: Build Android APK
-        working-directory: ./
+        working-directory: ./nutrition-tracker/
         run: cd android && ./gradlew assembleDebug && cd ..
 
       - name: Upload generated APK to Github
