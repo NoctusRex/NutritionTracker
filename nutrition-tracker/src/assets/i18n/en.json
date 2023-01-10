@@ -18,7 +18,7 @@
     "tabs": {
       "dashboard": {
         "header": {
-          "TITLE": "Dashboard"
+          "TITLE": "Daily"
         },
         "content": {
           "POSITION_TITLE": "Eaten Today"

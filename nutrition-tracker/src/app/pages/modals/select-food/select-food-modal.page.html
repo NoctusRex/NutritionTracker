@@ -3,9 +3,9 @@
 
 <ion-content>
     <ion-header>
-        <ion-toolbar color="light">
+        <ion-toolbar color="secondary">
             <app-content-wrapper [padding]="2">
-                <ion-item color="medium">
+                <ion-item lines="none">
                     <ion-icon slot="start" name="search"></ion-icon>
                     <ion-input [placeholder]="'pages.modals.select-food.content.FILTER_PLACEHOLDER' | translate"
                         [(ngModel)]="filterText"></ion-input>
@@ -27,7 +27,7 @@
 
         <ion-list *ngIf="(items?.length ?? 0 > 0); else noValues">
             <ion-item-sliding *ngFor="let item of getFilteredItems()">
-                <ion-item detail="true" button (click)="selectItem(item)">
+                <ion-item lines="full" detail="true" button (click)="selectItem(item)">
                     <ion-icon slot="start" name="fast-food"></ion-icon>
                     <ion-label>
                         <h3>{{ item.id }}</h3>

@@ -8,17 +8,18 @@
 
     <ion-card>
       <ion-card-header>
-        <ion-item button detail="true" (click)="addPosition()" detail-icon="add-circle">
+        <ion-item button detail="true" (click)="addPosition()" lines="none">
           <ion-label>
             <h1>{{ "pages.tabs.dashboard.content.POSITION_TITLE" | translate }}</h1>
           </ion-label>
+          <ion-icon slot="end" name="add-circle" color="dark"></ion-icon>
         </ion-item>
       </ion-card-header>
 
       <ion-card-content>
         <ion-list>
           <ion-item-sliding *ngFor="let position of values$ | async">
-            <ion-item button detail="true" (click)="openPosition(position)">
+            <ion-item button detail="true" lines="full" (click)="openPosition(position)">
               <ion-icon name="fast-food" slot="start"></ion-icon>
               <ion-label>
                 <h3>{{ position.item.id }}</h3>

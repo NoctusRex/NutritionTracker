@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ViewDidEnter } from '@ionic/angular';
 import { NutritionFacts } from '../../models/nutrition-facts.model';
 
 @Component({
   templateUrl: './nutrition-facts.component.html',
   selector: 'app-nutrition-facts',
 })
-export class NutritionFactsComponent {
+export class NutritionFactsComponent implements OnInit {
   @Input() nutritionFacts: NutritionFacts | null = {
     calories: undefined,
     protein: undefined,
@@ -18,6 +19,14 @@ export class NutritionFactsComponent {
   };
   @Input() enableInput: boolean = false;
   @Output() isValid = new EventEmitter<boolean>();
+
+  nutritionFactsComponent = NutritionFactsComponent;
+  static showDetails = false;
+
+  ngOnInit(): void {
+    this.nutritionFactsComponent.showDetails =
+      NutritionFactsComponent.showDetails;
+  }
 
   isValueValid(
     value: number | undefined,
@@ -80,5 +89,12 @@ export class NutritionFactsComponent {
       this.isValueValid(this.nutritionFacts?.fiber, undefined, false);
 
     this.isValid.emit(valid);
+  }
+
+  toggleDetails(): void {
+    if (this.enableInput) return;
+
+    this.nutritionFactsComponent.showDetails =
+      !this.nutritionFactsComponent.showDetails;
   }
 }

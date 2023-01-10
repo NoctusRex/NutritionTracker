@@ -1,23 +1,10 @@
 import { Injectable } from '@angular/core';
-import { add, values } from 'lodash';
 import moment from 'moment';
-import {
-  concatMap,
-  filter,
-  forkJoin,
-  from,
-  interval,
-  map,
-  Observable,
-  take,
-  tap,
-  toArray,
-} from 'rxjs';
+import { concatMap, interval, map, Observable, of, take, tap } from 'rxjs';
 import { SETTINGS_STORAGE_KEY } from '../consts/storage-keys.const';
 import { ItemPosition } from '../models/item-position.model';
 import { NutritionFacts } from '../models/nutrition-facts.model';
 import { Settings } from '../models/settings.model';
-import { ApplicationConfigurationService } from './application-configuration.service';
 import { CollectionService } from './collection.service';
 import { PouchDbService } from './pouch-db.service';
 import { StorageService } from './storage.service';
@@ -35,32 +22,16 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
 
   get todaysValues$(): Observable<Array<ItemPosition>> {
     return interval(50).pipe(
+      concatMap((interval) => {
+        return interval % 600 === 0 ? this.refresh$() : of(null);
+      }),
       concatMap(() => this.values$.pipe(take(1))),
       map((positions) => {
-        const settings = this.getSettings();
-
         return positions.filter((x) => {
           const now = moment();
-          const dayNow = now.day();
-          const monthNow = now.month();
-          const yearNow = now.year();
-          const hourNow = now.hour();
-
           const added = moment(x.timeStampAdded);
-          const dayAdded = added.day();
-          const monthAdded = added.month();
-          const yearAdded = added.year();
-          const hourAdded = added.hour() === 0 ? 24 : added.hour();
 
-          const hourWasYesterday = hourNow - hourAdded < 0;
-          const resetHour = settings.resetHour!;
-
-          if (yearNow > yearAdded) return false;
-          if (monthNow > monthAdded) return false;
-          // TODO: if (dayNow > dayAdded && !hourWasYesterday) return false;
-          // TODO: if (dayNow <= dayAdded && hourAdded > resetHour) return false;
-
-          return true;
+          return now.diff(added) <= 24 * 60 * 60 * 1000;
         });
       })
     );
