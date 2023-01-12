@@ -1,18 +1,18 @@
-<app-header [component]="this" title="pages.modals.select-food.header.TITLE" submitIcon="add-circle">
-</app-header>
+<ion-header>
+    <app-header [component]="this" title="pages.modals.select-food.header.TITLE" submitIcon="add-circle">
+    </app-header>
+    <ion-toolbar color="secondary">
+        <app-content-wrapper [padding]="2">
+            <ion-item lines="none">
+                <ion-icon slot="start" name="search"></ion-icon>
+                <ion-input [placeholder]="'pages.modals.select-food.content.FILTER_PLACEHOLDER' | translate"
+                    [(ngModel)]="filterText"></ion-input>
+            </ion-item>
+        </app-content-wrapper>
+    </ion-toolbar>
+</ion-header>
 
 <ion-content>
-    <ion-header>
-        <ion-toolbar color="secondary">
-            <app-content-wrapper [padding]="2">
-                <ion-item lines="none">
-                    <ion-icon slot="start" name="search"></ion-icon>
-                    <ion-input [placeholder]="'pages.modals.select-food.content.FILTER_PLACEHOLDER' | translate"
-                        [(ngModel)]="filterText"></ion-input>
-                </ion-item>
-            </app-content-wrapper>
-        </ion-toolbar>
-    </ion-header>
 
     <app-content-wrapper [padding]="2">
         <ng-template #noValues>

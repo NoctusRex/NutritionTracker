@@ -5,11 +5,13 @@ import {
   catchError,
   concatMap,
   forkJoin,
+  from,
   map,
   Observable,
   of,
   take,
   tap,
+  toArray,
 } from 'rxjs';
 import { PouchDbService } from './pouch-db.service';
 
@@ -32,16 +34,32 @@ export abstract class CollectionService<T extends Partial<{ id: string }>> {
   constructor(protected key: string, protected pouchDbSerive: PouchDbService) {}
 
   refresh$(): Observable<void> {
-    return this.pouchDbSerive.get$<Array<T>>(this.key).pipe(
+    return this.beforeRefresh$().pipe(
+      concatMap(() => this.pouchDbSerive.get$<Array<T>>(this.key)),
       catchError((error) => {
         console.debug('Collection service - refresh error', this.key, error);
 
         return of([]);
       }),
+      concatMap((data) => from(data)),
+      concatMap((value) => this.modifyRefreshValue$(value)),
+      toArray(),
       map((data) => {
         console.log('Collection service - refresh', this.key, data);
 
         this._values$.next(data);
+        return;
+      })
+    );
+  }
+
+  protected modifyRefreshValue$(value: T): Observable<T> {
+    return of(value);
+  }
+
+  protected beforeRefresh$(): Observable<void> {
+    return of(null).pipe(
+      map(() => {
         return;
       })
     );

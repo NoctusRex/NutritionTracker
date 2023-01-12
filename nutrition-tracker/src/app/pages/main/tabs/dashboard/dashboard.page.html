@@ -1,6 +1,8 @@
-<app-header [component]="this" [canGoBack]="false" [canSubmit]="false" title="pages.tabs.dashboard.header.TITLE">
-  <ion-button (click)="openSettings()"><ion-icon slot="icon-only" name="settings"></ion-icon></ion-button>
-</app-header>
+<ion-header>
+  <app-header [component]="this" [canGoBack]="false" [canSubmit]="false" title="pages.tabs.dashboard.header.TITLE">
+    <ion-button (click)="openSettings()"><ion-icon slot="icon-only" name="settings"></ion-icon></ion-button>
+  </app-header>
+</ion-header>
 
 <ion-content [fullscreen]="true">
   <app-content-wrapper>

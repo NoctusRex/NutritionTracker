@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
-import { concatMap, interval, map, Observable, of, take, tap } from 'rxjs';
+import { concatMap, interval, map, Observable, of, take } from 'rxjs';
 import { SETTINGS_STORAGE_KEY } from '../consts/storage-keys.const';
 import { ItemPosition } from '../models/item-position.model';
 import { NutritionFacts } from '../models/nutrition-facts.model';
 import { Settings } from '../models/settings.model';
 import { CollectionService } from './collection.service';
+import { ItemService } from './item.service';
 import { PouchDbService } from './pouch-db.service';
 import { StorageService } from './storage.service';
 import { UnitOfMeasureUtilsService } from './unit-of-measure-utils.service';
@@ -15,7 +16,8 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
   constructor(
     pouchDbSerive: PouchDbService,
     protected unitOfMeasureUtilsService: UnitOfMeasureUtilsService,
-    protected storageService: StorageService
+    protected storageService: StorageService,
+    protected itemService: ItemService
   ) {
     super('item-positions', pouchDbSerive);
   }
@@ -33,6 +35,24 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
 
           return now.diff(added) <= 24 * 60 * 60 * 1000;
         });
+      })
+    );
+  }
+
+  protected override beforeRefresh$(): Observable<void> {
+    return this.itemService.refresh$();
+  }
+
+  protected override modifyRefreshValue$(
+    value: ItemPosition
+  ): Observable<ItemPosition> {
+    return this.itemService.get$(value.item.id).pipe(
+      map((item) => {
+        if (!item) return value;
+
+        value.item = item;
+
+        return value;
       })
     );
   }

@@ -13,6 +13,7 @@ import { FoodQuantityModalPageComponent } from 'src/app/pages/modals/food-quanti
 import { Item } from 'src/app/core/models/item.model';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
+import { ItemService } from 'src/app/core/services/item.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,8 +27,9 @@ export class DashboardPage extends BaseComponent implements OnInit {
     router: Router,
     location: Location,
     protected itemPositionService: ItemPositionService,
+    protected itemService: ItemService,
     protected unitOfMeasureUtilsService: UnitOfMeasureUtilsService,
-    private modalService: ModalService
+    protected modalService: ModalService
   ) {
     super(router, location);
   }
@@ -72,7 +74,12 @@ export class DashboardPage extends BaseComponent implements OnInit {
 
   openPosition(position: ItemPosition): void {
     this.showPosition$(position)
-      .pipe(concatMap((position) => this.itemPositionService.update$(position)))
+      .pipe(
+        concatMap((position) =>
+          this.itemService.update$(position.item).pipe(map(() => position))
+        ),
+        concatMap((position) => this.itemPositionService.update$(position))
+      )
       .subscribe();
   }
 

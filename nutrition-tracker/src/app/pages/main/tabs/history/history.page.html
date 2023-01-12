@@ -1,8 +1,77 @@
-<app-header [component]="this" [canGoBack]="false" [canSubmit]="false"
-  title="pages.tabs.history.header.TITLE"></app-header>
+<ion-header>
+  <app-header [component]="this" [canGoBack]="false" [canSubmit]="false"
+    title="pages.tabs.history.header.TITLE"></app-header>
+  <ion-toolbar color="secondary">
+    <ion-item lines="none" button detail="true" detail-icon="swap-horizontal" (click)="changeGraphSelection()">
+      <ion-label class="ion-text-center">
+        <h1><strong>{{ getSelectionText$() | async }}</strong></h1>
+        <p>{{ getGraphInformationText() | translate }}</p>
+      </ion-label>
+    </ion-item>
+    <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
   <app-content-wrapper>
+    <ion-list>
+      <ion-item-group *ngFor="let group of groups">
+        <ion-item-divider color="tertiary">
+          <ion-item color="tertiary">
+            <ion-label>
+              <strong>{{ group.date | date:"dd.MM.YYYY"}}</strong>
+            </ion-label>
+          </ion-item>
+        </ion-item-divider>
 
+        <ion-item-sliding *ngFor="let position of group.positions; index as i">
+          <ion-item lines="full" [color]="i % 2 === 0 ? 'table-row-two' : 'table-row-one'" detail="true">
+            <ion-icon class="ion-padding-start" name="fast-food" slot="start"></ion-icon>
+            <ion-label>
+              <h3>{{ position.item.id }}</h3>
+              <p>{{ position.item.description }}</p>
+            </ion-label>
+            <ion-label class="ion-text-end ion-padding-end">
+              {{ position.quantity?.value }} {{ position.quantity?.unit }}
+            </ion-label>
+          </ion-item>
+
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="removePosition(position)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-item-group>
+    </ion-list>
   </app-content-wrapper>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar color="secondary">
+    <app-content-wrapper>
+      <ion-grid class="ion-no-padding ion-no-margin">
+        <ion-row>
+          <ion-col>
+            <ion-button [fill]="selection === 'filter' ? undefined : 'clear'"
+              (click)="changeSelection('filter')"><ion-icon color="dark" slot="icon-only"
+                name="filter"></ion-icon></ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button [fill]="selection === 'all' ? undefined : 'clear'" (click)="changeSelection('all')"><ion-icon
+                color="dark" slot="icon-only" name="menu"></ion-icon></ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button [fill]="selection === 'month' ? undefined : 'clear'"
+              (click)="changeSelection('month')"><ion-icon color="dark" slot="icon-only"
+                name="reorder-three"></ion-icon></ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button [fill]="selection === 'week' ? undefined : 'clear'" (click)="changeSelection('week')"><ion-icon
+                color="dark" slot="icon-only" name="reorder-two"></ion-icon></ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </app-content-wrapper>
+  </ion-toolbar>
+</ion-footer>

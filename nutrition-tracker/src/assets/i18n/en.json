@@ -27,6 +27,20 @@
       "history": {
         "header": {
           "TITLE": "History"
+        },
+        "content": {
+          "SELECTION_TEXT_MONTH": "30 days",
+          "SELECTION_TEXT_WEEK": "7 days",
+          "SELECTION_TEXT_FILTER": "{{min}} to {{max}}",
+          "SELECTION_TEXT_ALL": "All",
+          "GRAPH_INFORMATION_CALORIES": "Calories",
+          "GRAPH_INFORMATION_TOTALFAT": "Total Fat",
+          "GRAPH_INFORMATION_SATURATEDFAT": "Saturated Fat",
+          "GRAPH_INFORMATION_TOTALCARBOHYDRATE": "Total Carb.",
+          "GRAPH_INFORMATION_SUGAR": "Sugars",
+          "GRAPH_INFORMATION_PROTEIN": "Protein",
+          "GRAPH_INFORMATION_SODIUM": "Sodium",
+          "GRAPH_INFORMATION_FIBER": "Fiber"
         }
       }
     },

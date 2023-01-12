@@ -1,16 +1,14 @@
-<ion-header>
-    <ion-toolbar color="primary">
-        <ion-title>{{ title | translate}}</ion-title>
-        <ion-buttons *ngIf="canGoBack" slot="start">
-            <ion-button slot="icon-only" (click)="component.goBack()">
-                <ion-icon name="arrow-back"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <ion-buttons slot="end">
-            <ng-content></ng-content>
-            <ion-button slot="icon-only" *ngIf="canSubmit" [disabled]="disableSubmit" (click)="component.submit()">
-                <ion-icon [name]="submitIcon"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
-</ion-header>
+<ion-toolbar color="primary">
+    <ion-title>{{ title | translate}}</ion-title>
+    <ion-buttons *ngIf="canGoBack" slot="start">
+        <ion-button slot="icon-only" (click)="component.goBack()">
+            <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+        <ng-content></ng-content>
+        <ion-button slot="icon-only" *ngIf="canSubmit" [disabled]="disableSubmit" (click)="component.submit()">
+            <ion-icon [name]="submitIcon"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+</ion-toolbar>

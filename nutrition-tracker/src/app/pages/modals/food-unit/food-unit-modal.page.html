@@ -1,7 +1,9 @@
-<app-header [component]="this" title="pages.modals.food-unit.header.TITLE" [disableSubmit]="!canSubmit()">
-    <ion-button [disabled]="isNewUnitOfMeasure" (click)="deleteUnit()"><ion-icon slot="icon-only"
-            name="trash"></ion-icon></ion-button>
-</app-header>
+<ion-header>
+    <app-header [component]="this" title="pages.modals.food-unit.header.TITLE" [disableSubmit]="!canSubmit()">
+        <ion-button [disabled]="isNewUnitOfMeasure" (click)="deleteUnit()"><ion-icon slot="icon-only"
+                name="trash"></ion-icon></ion-button>
+    </app-header>
+</ion-header>
 
 <ion-content>
     <app-content-wrapper [padding]="2">

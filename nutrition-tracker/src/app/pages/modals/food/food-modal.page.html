@@ -1,9 +1,11 @@
-<app-header [component]="this" title="pages.modals.food.header.TITLE"
-    [disableSubmit]="(canSubmit$() | async) === false">
-    <ion-button [disabled]="isNewItem" (click)="deleteItem()"><ion-icon slot="icon-only"
-            name="trash"></ion-icon></ion-button>
-    <ion-button (click)="openUnit()"><ion-icon slot="icon-only" name="barbell"></ion-icon></ion-button>
-</app-header>
+<ion-header>
+    <app-header [component]="this" title="pages.modals.food.header.TITLE"
+        [disableSubmit]="(canSubmit$() | async) === false">
+        <ion-button [disabled]="isNewItem" (click)="deleteItem()"><ion-icon slot="icon-only"
+                name="trash"></ion-icon></ion-button>
+        <ion-button (click)="openUnit()"><ion-icon slot="icon-only" name="barbell"></ion-icon></ion-button>
+    </app-header>
+</ion-header>
 
 <ion-content>
     <app-content-wrapper [padding]="2">
