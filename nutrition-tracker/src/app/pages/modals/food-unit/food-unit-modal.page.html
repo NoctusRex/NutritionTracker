@@ -1,4 +1,6 @@
 <app-header [component]="this" title="pages.modals.food-unit.header.TITLE" [disableSubmit]="!canSubmit()">
+    <ion-button [disabled]="isNewUnitOfMeasure" (click)="deleteUnit()"><ion-icon slot="icon-only"
+            name="trash"></ion-icon></ion-button>
 </app-header>
 
 <ion-content>
@@ -17,20 +19,14 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <ion-icon slot="start" *ngIf="!isUnitValid()" color="danger"
-                                    name="alert-circle"></ion-icon>
-                                <ion-icon slot="start" *ngIf="isUnitValid()" color="success"
-                                    name="checkmark-circle"></ion-icon>
-                                <ion-icon slot="start" name="barbell"></ion-icon>
+                                <ion-icon slot="start" name="barbell"
+                                    [color]="isUnitValid() ? 'success' : 'danger'"></ion-icon>
                                 <ion-input [(ngModel)]="unitOfMeasure.id" [disabled]="!isNewUnitOfMeasure"
                                     [placeholder]="'pages.modals.food-unit.content.UNIT_PLACEHOLDER' | translate"></ion-input>
                             </ion-item>
                             <ion-item>
-                                <ion-icon slot="start" *ngIf="!isFactorValid()" color="danger"
-                                    name="alert-circle"></ion-icon>
-                                <ion-icon slot="start" *ngIf="isFactorValid()" color="success"
-                                    name="checkmark-circle"></ion-icon>
-                                <ion-icon slot="start" name="link"></ion-icon>
+                                <ion-icon slot="start" name="link"
+                                    [color]="isFactorValid() ? 'success' : 'danger'"></ion-icon>
                                 <ion-input [(ngModel)]="unitOfMeasure.factor" type="number"
                                     [placeholder]="'pages.modals.food-unit.content.FACTOR_PLACEHOLDER' | translate"></ion-input>
                                 <ion-note slot="helper" *ngIf="unitOfMeasure.id">{{ getHelperNote$() |

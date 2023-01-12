@@ -1,10 +1,10 @@
 <ion-card>
     <ion-card-header>
         <ion-item lines="none" [button]="!enableInput" (click)="toggleDetails()">
-            <ion-label *ngIf="nutritionFactsComponent.showDetails">
+            <ion-label *ngIf="nutritionFactsComponent.showDetails || enableInput">
                 <h1>{{ "core.components.nutrition-facts.TITLE" | translate }}</h1>
             </ion-label>
-            <ion-label *ngIf="!nutritionFactsComponent.showDetails">
+            <ion-label *ngIf="!nutritionFactsComponent.showDetails && !enableInput">
                 <h1>{{ nutritionFacts?.calories }} kcal</h1>
             </ion-label>
             <ion-icon *ngIf="!enableInput" slot="end"
@@ -86,7 +86,7 @@
         <ion-grid class="ion-no-padding">
             <ion-row>
                 <ion-col>
-                    <ion-item lines="full" color="table-row-two">
+                    <ion-item lines="full">
                         <ion-label><strong>{{ "core.components.nutrition-facts.CALORIES" |
                                 translate }}</strong></ion-label>
                         <ion-icon slot="start" *ngIf="!isCaloriesValid()" color="danger" name="alert-circle"></ion-icon>
@@ -100,8 +100,8 @@
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col color="table-row-two">
-                    <ion-item lines="none" color="table-row-one">
+                <ion-col>
+                    <ion-item lines="none">
                         <ion-label><strong>{{ "core.components.nutrition-facts.TOTAL_FAT" |
                                 translate }}</strong></ion-label>
                         <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.totalFat)" color="danger"
@@ -113,7 +113,7 @@
                             [placeholder]="'core.components.nutrition-facts.TOTAL_FAT' | translate"></ion-input>
                         <ion-label class="ion-text-end">g</ion-label>
                     </ion-item>
-                    <ion-item lines="full" color="table-row-one">
+                    <ion-item lines="full">
                         <ion-label class="ion-padding-start">{{ "core.components.nutrition-facts.SATURATED_FAT" |
                             translate }}</ion-label>
                         <ion-icon slot="start"
@@ -130,8 +130,8 @@
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col color="table-row-two">
-                    <ion-item lines="none" color="table-row-two">
+                <ion-col>
+                    <ion-item lines="none">
                         <ion-label><strong>{{
                                 "core.components.nutrition-facts.TOTAL_CARBOHYDRATE" |
                                 translate }}</strong></ion-label>
@@ -144,7 +144,7 @@
                             [placeholder]="'core.components.nutrition-facts.TOTAL_CARBOHYDRATE' | translate"></ion-input>
                         <ion-label class="ion-text-end">g</ion-label>
                     </ion-item>
-                    <ion-item lines="full" color="table-row-two">
+                    <ion-item lines="full">
                         <ion-label class="ion-padding-start">{{ "core.components.nutrition-facts.SUGAR" |
                             translate }}</ion-label>
                         <ion-icon slot="start"
@@ -162,7 +162,7 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <ion-item lines="full" color="table-row-one">
+                    <ion-item lines="full">
                         <ion-label><strong>{{
                                 "core.components.nutrition-facts.PROTEIN" |
                                 translate }}</strong></ion-label>
@@ -179,7 +179,7 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <ion-item lines="full" color="table-row-two">
+                    <ion-item lines="full">
                         <ion-label><strong>{{
                                 "core.components.nutrition-facts.FIBER" |
                                 translate }}</strong></ion-label>
@@ -196,7 +196,7 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <ion-item lines="full" color="table-row-one">
+                    <ion-item lines="full">
                         <ion-label><strong>{{
                                 "core.components.nutrition-facts.SODIUM" |
                                 translate }}</strong></ion-label>

@@ -51,7 +51,7 @@ export class SelectFoodModalPageComponent
   override submit(): void {
     this.modalService
       .show$<Item>({ component: FoodModalPageComponent })
-      .pipe(concatMap((item) => this.itemService.add$(item)))
+      .pipe(concatMap((result) => this.itemService.add$(result.data)))
       .subscribe();
   }
 
@@ -69,7 +69,7 @@ export class SelectFoodModalPageComponent
         component: FoodModalPageComponent,
         componentProps: { item: cloneDeep(item) },
       })
-      .pipe(concatMap((item) => this.itemService.update$(item)))
+      .pipe(concatMap((result) => this.itemService.update$(result.data)))
       .subscribe();
   }
 }

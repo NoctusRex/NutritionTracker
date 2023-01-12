@@ -37,7 +37,7 @@ export class FoodModalPageComponent extends BaseComponent implements OnInit {
 
     this.isNewItem = true;
     this.item = {
-      id: 'New Food',
+      id: '',
       description: '',
       nutritionFacts: {},
       units: [{ id: 'g', factor: 1, isBase: true }],
@@ -63,14 +63,21 @@ export class FoodModalPageComponent extends BaseComponent implements OnInit {
           item: this.item,
         },
       })
-      .subscribe((unitOfMeasure) => {
+      .subscribe((result) => {
+        if (result.role === 'delete') {
+          this.item.units = this.item.units.filter(
+            (x) => x.id !== result.data.id
+          );
+          return;
+        }
+
         const existingUnit = this.item.units.find(
-          (x) => x.id === unitOfMeasure.id
+          (x) => x.id === result.data.id
         );
         if (existingUnit) {
-          Object.assign(existingUnit, unitOfMeasure);
+          Object.assign(existingUnit, result.data);
         } else {
-          this.item.units.push(unitOfMeasure);
+          this.item.units.push(result.data);
         }
       });
   }
@@ -98,5 +105,11 @@ export class FoodModalPageComponent extends BaseComponent implements OnInit {
         return existingItem ? false : true;
       })
     );
+  }
+
+  deleteItem(): void {
+    this.itemService
+      .remove$(this.item)
+      .subscribe(() => this.modalService.dismiss(null));
   }
 }

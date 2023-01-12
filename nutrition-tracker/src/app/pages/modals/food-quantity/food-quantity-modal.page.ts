@@ -27,6 +27,8 @@ export class FoodQuantityModalPageComponent
   unit!: string;
   quantity!: number;
 
+  isNewQuantity!: boolean;
+
   constructor(
     router: Router,
     location: Location,
@@ -44,10 +46,13 @@ export class FoodQuantityModalPageComponent
       this.unit = this.position.quantity.unit;
       this.quantity = this.position.quantity.value;
 
+      this.isNewQuantity = false;
+
       return;
     }
 
     this.unit = this.position.item.units.find((x) => x.isBase)?.id!;
+    this.isNewQuantity = true;
   }
 
   override goBack(): void {
@@ -64,7 +69,7 @@ export class FoodQuantityModalPageComponent
   }
 
   canSubmit(): boolean {
-    return this.quantity > 0;
+    return this.quantity > 0 && this.isUnitOfMeasureValid();
   }
 
   openItem(): void {
@@ -74,16 +79,25 @@ export class FoodQuantityModalPageComponent
         componentProps: { item: cloneDeep(this.position.item) },
       })
       .pipe(
-        concatMap((item) => {
-          this.position.item = item;
+        concatMap((result) => {
+          if (!result.data) {
+            if (this.isNewQuantity) {
+              setTimeout(() => {
+                this.modalService.cancel();
+              }, 25);
+            }
 
-          return this.itemService.get$(item.id).pipe(
+            return of(null);
+          }
+          this.position.item = result.data;
+
+          return this.itemService.get$(result.data.id).pipe(
             concatMap((existingItem) => {
               if (existingItem) {
-                return this.itemService.update$(item);
+                return this.itemService.update$(result.data);
               }
 
-              return this.itemService.add$(item);
+              return this.itemService.add$(result.data);
             })
           );
         })
@@ -91,8 +105,13 @@ export class FoodQuantityModalPageComponent
       .subscribe();
   }
 
+  isUnitOfMeasureValid(): boolean {
+    return this.position.item.units.some((x) => x.id === this.unit);
+  }
+
   getHelperNote$(): Observable<string> {
     if (!this.quantity) return of('-');
+    if (!this.isUnitOfMeasureValid()) return of('-');
 
     return this.translationService
       .translate$('pages.modals.food-quantity.content.IS')
@@ -110,7 +129,15 @@ export class FoodQuantityModalPageComponent
 
   getNutritionFacts(): NutritionFacts {
     return this.itemPositionService.getTotal([
-      { ...this.position, quantity: { value: this.quantity, unit: this.unit } },
+      {
+        ...this.position,
+        quantity: {
+          value: this.quantity,
+          unit: this.isUnitOfMeasureValid()
+            ? this.unit
+            : this.position.item.units.find((x) => x.isBase)?.id!,
+        },
+      },
     ]);
   }
 }

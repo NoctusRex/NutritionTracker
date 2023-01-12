@@ -25,7 +25,8 @@
                     <ion-row>
                         <ion-col>
                             <ion-item lines="full">
-                                <ion-icon slot="start" name="restaurant"></ion-icon>
+                                <ion-icon slot="start" name="restaurant"
+                                    [color]="canSubmit() ? 'success' : 'danger'"></ion-icon>
                                 <ion-input type="number" [(ngModel)]="quantity"
                                     [placeholder]="'pages.modals.food-quantity.content.QUANTITY_PLACEHOLDER' | translate"></ion-input>
                                 <ion-select [(ngModel)]="unit" interface="popover">

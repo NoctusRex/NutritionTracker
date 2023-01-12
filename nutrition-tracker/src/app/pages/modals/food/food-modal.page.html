@@ -1,5 +1,7 @@
 <app-header [component]="this" title="pages.modals.food.header.TITLE"
     [disableSubmit]="(canSubmit$() | async) === false">
+    <ion-button [disabled]="isNewItem" (click)="deleteItem()"><ion-icon slot="icon-only"
+            name="trash"></ion-icon></ion-button>
     <ion-button (click)="openUnit()"><ion-icon slot="icon-only" name="barbell"></ion-icon></ion-button>
 </app-header>
 
@@ -19,17 +21,13 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <ion-icon slot="start" *ngIf="(isItemValid$() | async) === false" color="danger"
-                                    name="alert-circle"></ion-icon>
-                                <ion-icon slot="start" *ngIf="(isItemValid$() | async)" color="success"
-                                    name="checkmark-circle"></ion-icon>
-                                <ion-icon slot="start" name="fast-food"></ion-icon>
+                                <ion-icon slot="start" name="fast-food"
+                                    [color]="(isItemValid$() | async) ? 'success' : 'danger'"></ion-icon>
                                 <ion-input [(ngModel)]="item.id" [disabled]="!isNewItem"
                                     [placeholder]="'pages.modals.food.content.ITEM_PLACEHOLDER' | translate"></ion-input>
                             </ion-item>
                             <ion-item>
-                                <ion-icon slot="start" color="success" name="checkmark-circle"></ion-icon>
-                                <ion-icon slot="start" name="information-circle"></ion-icon>
+                                <ion-icon slot="start" name="information-circle" color="success"></ion-icon>
                                 <ion-input [(ngModel)]="item.description"
                                     [placeholder]="'pages.modals.food.content.DESCRIPTION_PLACEHOLDER' | translate"></ion-input>
                             </ion-item>
@@ -53,8 +51,9 @@
 
             <ion-card-content>
                 <ion-list>
-                    <ion-item-sliding *ngFor="let unit of item.units">
-                        <ion-item button [detail]="!unit.isBase" (click)="openUnit(unit)">
+                    <ion-item-sliding *ngFor="let unit of item.units; index as i">
+                        <ion-item button [detail]="!unit.isBase" (click)="openUnit(unit)"
+                            [color]="i % 2 === 0 ? 'table-row-two' : 'table-row-one'">
                             <ion-label>{{ unit.id }}</ion-label>
                             <ion-label class="ion-text-end">{{ unit.factor }}</ion-label>
                         </ion-item>

@@ -75,6 +75,10 @@ export class FoodUnitModalPageComponent
     return this.unitOfMeasure.factor > 0;
   }
 
+  deleteUnit(): void {
+    this.modalService.dismiss(cloneDeep(this.unitOfMeasure), 'delete');
+  }
+
   getHelperNote$(): Observable<string> {
     return this.translationService
       .translate$('pages.modals.food-unit.content.IS')

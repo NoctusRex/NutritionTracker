@@ -6,8 +6,9 @@ import { concatMap, filter, from, map, Observable } from 'rxjs';
 export class ModalService {
   constructor(private modalController: ModalController) {}
 
-  show$<T>(opts: ModalOptions): Observable<T> {
+  show$<T>(opts: ModalOptions): Observable<{ data: T; role?: string }> {
     console.log('ModalSerivce - show', opts);
+    opts.animated = false;
 
     return from(this.modalController.create(opts)).pipe(
       concatMap((modal) => from(modal.present()).pipe(map(() => modal))),
@@ -15,7 +16,9 @@ export class ModalService {
       filter((result) => {
         return result.role !== 'cancel' && result.role !== 'backdrop';
       }),
-      map((result) => result.data as T)
+      map((result) => {
+        return { data: result.data as T, role: result.role };
+      })
     );
   }
 
@@ -31,7 +34,7 @@ export class ModalService {
     console.log('ModalSerivce - dismiss', { data, role });
 
     return from(this.modalController.dismiss(data, role)).pipe(
-      map(() => {
+      map((x) => {
         return;
       })
     );

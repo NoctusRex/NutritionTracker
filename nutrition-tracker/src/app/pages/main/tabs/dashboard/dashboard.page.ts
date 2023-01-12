@@ -46,12 +46,12 @@ export class DashboardPage extends BaseComponent implements OnInit {
     this.modalService
       .show$<Item>({ component: SelectFoodModalPageComponent })
       .pipe(
-        concatMap((item) =>
+        concatMap((result) =>
           this.showPosition$({
             id: `${Date.now()}`,
-            item,
+            item: result.data,
             quantity: undefined,
-            timeStampAdded: moment().toISOString(true),
+            timeStampAdded: moment().format('YYYY-MM-DD'),
           })
         ),
         concatMap((position) => {
@@ -62,10 +62,12 @@ export class DashboardPage extends BaseComponent implements OnInit {
   }
 
   showPosition$(position: ItemPosition): Observable<ItemPosition> {
-    return this.modalService.show$<ItemPosition>({
-      component: FoodQuantityModalPageComponent,
-      componentProps: { position: cloneDeep(position) },
-    });
+    return this.modalService
+      .show$<ItemPosition>({
+        component: FoodQuantityModalPageComponent,
+        componentProps: { position: cloneDeep(position) },
+      })
+      .pipe(map((x) => x.data));
   }
 
   openPosition(position: ItemPosition): void {
