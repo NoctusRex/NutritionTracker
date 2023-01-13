@@ -40,7 +40,9 @@
           "GRAPH_INFORMATION_SUGAR": "Sugars",
           "GRAPH_INFORMATION_PROTEIN": "Protein",
           "GRAPH_INFORMATION_SODIUM": "Sodium",
-          "GRAPH_INFORMATION_FIBER": "Fiber"
+          "GRAPH_INFORMATION_FIBER": "Fiber",
+          "GRAPH_TO_MANY_ELEMENTS": "To many days to display.",
+          "GRAPH_NO_ELEMENTS": "No days to display."
         }
       }
     },
@@ -85,6 +87,14 @@
           "QUANTITY_DATA_TITLE": "Quantity Facts",
           "IS": "is",
           "QUANTITY_PLACEHOLDER": "Quantity"
+        }
+      },
+      "history-filter": {
+        "header": {
+          "TITLE": "History Filter"
+        },
+        "content": {
+          "FILTER_TITLE": "Min and Max-Date"
         }
       }
     },

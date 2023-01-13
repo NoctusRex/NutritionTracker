@@ -2,21 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/core/components/base-component/base.component';
 import { Location } from '@angular/common';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { ItemPosition } from 'src/app/core/models/item-position.model';
 import { ItemPositionService } from 'src/app/core/services/item-position.serivce';
-import { first, get, last, map as _map, orderBy } from 'lodash';
+import {
+  cloneDeep,
+  fill,
+  first,
+  get,
+  last,
+  map as _map,
+  orderBy,
+  take,
+} from 'lodash';
 import { Layout } from 'plotly.js';
 import { Config, PlotData } from 'plotly.js-dist-min';
 import moment from 'moment';
 import { TranslationService } from 'src/app/core/services/translation.service';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { HistoryFilterModalPageComponent } from 'src/app/pages/modals/history-filter/history-filter-modal.page';
 
 @Component({
   selector: 'app-history',
   templateUrl: 'history.page.html',
 })
 export class HistoryPage extends BaseComponent implements OnInit {
-  selection: 'filter' | 'all' | 'month' | 'week' = 'all';
+  selection: 'filter' | 'all' | 'month' | 'week' = 'month';
   currentGraphInformation: string = 'calories';
   graphInformation: Array<string> = [
     'calories',
@@ -28,8 +39,10 @@ export class HistoryPage extends BaseComponent implements OnInit {
     'sodium',
     'fiber',
   ];
-
+  showMissingDays = false;
   groups!: Array<{ date: string; positions: Array<ItemPosition> }>;
+  min: string = '';
+  max: string = '';
 
   graph = {
     data: [
@@ -38,7 +51,7 @@ export class HistoryPage extends BaseComponent implements OnInit {
       } as PlotData,
     ],
     layout: {
-      margin: { b: 50, l: 10, t: 10, r: 10 },
+      margin: { b: 65, l: 10, t: 10, r: 10 },
       yaxis: { visible: false },
     } as Partial<Layout>,
     config: {
@@ -54,7 +67,8 @@ export class HistoryPage extends BaseComponent implements OnInit {
     router: Router,
     location: Location,
     private itemPositionService: ItemPositionService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private modalSerivce: ModalService
   ) {
     super(router, location);
   }
@@ -84,6 +98,15 @@ export class HistoryPage extends BaseComponent implements OnInit {
                     moment().add(-7, 'days')
                   );
                 case 'filter':
+                  return (
+                    moment(position.timeStampAdded).isAfter(
+                      moment(this.min).add(-1, 'days')
+                    ) &&
+                    moment(position.timeStampAdded).isBefore(
+                      moment(this.max).add(1, 'days')
+                    )
+                  );
+
                 default:
                   return true;
               }
@@ -117,43 +140,88 @@ export class HistoryPage extends BaseComponent implements OnInit {
     this.graph.data[0].text = [];
     this.graph.layout.width = this.getWidth();
     this.graph.layout.height = this.getHeigth();
+    this.graph.layout.annotations = [];
 
     const maxDate = new Date(first(this.groups)?.date!);
     const minDate = new Date(last(this.groups)?.date!);
 
-    const filledGroups: Array<{
+    let filledGroups: Array<{
       date: string;
       positions: Array<ItemPosition>;
     }> = [];
-    let currentDate = new Date(minDate);
+    if (this.showMissingDays) {
+      let currentDate = new Date(minDate);
 
-    while (currentDate <= maxDate) {
-      const currentDateString = currentDate.toISOString().split('T')[0];
-      const existing = this.groups.find((x) => x.date === currentDateString);
+      while (currentDate <= maxDate) {
+        const currentDateString = currentDate.toISOString().split('T')[0];
+        const existing = this.groups.find((x) => x.date === currentDateString);
 
-      if (!existing) {
-        filledGroups.push({ date: currentDateString, positions: [] });
-      } else {
-        filledGroups.push(existing);
+        if (!existing) {
+          filledGroups.push({ date: currentDateString, positions: [] });
+        } else {
+          filledGroups.push(existing);
+        }
+
+        currentDate.setDate(currentDate.getDate() + 1);
       }
+    } else {
+      filledGroups = cloneDeep(this.groups).reverse();
+    }
+    // can not display > 30 elements in a fancy way
+    if (filledGroups.length > 30) {
+      this.translationService
+        .translate$('pages.tabs.history.content.GRAPH_TO_MANY_ELEMENTS')
+        .subscribe((text) => {
+          this.graph.layout.annotations = [
+            { showarrow: false, text, align: 'center' },
+          ];
+        });
+      return;
+    }
 
-      currentDate.setDate(currentDate.getDate() + 1);
+    // can not display > 30 elements in a fancy way
+    if (filledGroups.length <= 0) {
+      this.translationService
+        .translate$('pages.tabs.history.content.GRAPH_NO_ELEMENTS')
+        .subscribe((text) => {
+          this.graph.layout.annotations = [
+            { showarrow: false, text, align: 'center' },
+          ];
+        });
+      return;
     }
 
     filledGroups.forEach((group) => {
       const total = this.itemPositionService.getTotal(group.positions);
       const value: number = get(total, this.currentGraphInformation);
 
-      (this.graph.data[0].x as any).push(moment(group.date).format('DD.MMㅤ')); // the "ㅤ" is important!
+      (this.graph.data[0].x as any).push(moment(group.date).format('DD.MM.YY')); // the "ㅤ" is important!
       (this.graph.data[0].y as any).push(value!);
       (this.graph.data[0] as any).text.push(value!.toString());
     });
   }
 
-  changeSelection(filter: 'filter' | 'all' | 'month' | 'week'): void {
-    this.selection = filter;
+  changeSelection(selection: 'filter' | 'all' | 'month' | 'week'): void {
+    (selection === 'filter'
+      ? this.modalSerivce
+          .show$<{ min: string; max: string }>({
+            component: HistoryFilterModalPageComponent,
+            componentProps: { min: this.min, max: this.max },
+          })
+          .pipe(
+            map((result) => {
+              this.min = result.data.min;
+              this.max = result.data.max;
 
-    this.setGroups();
+              return null;
+            })
+          )
+      : of(null)
+    ).subscribe(() => {
+      this.selection = selection;
+
+      this.setGroups();
+    });
   }
 
   changeGraphSelection(): void {
@@ -202,5 +270,10 @@ export class HistoryPage extends BaseComponent implements OnInit {
 
   removePosition(position: ItemPosition): void {
     this.itemPositionService.remove$(position).subscribe();
+  }
+
+  toggleShowMissingDays(): void {
+    this.showMissingDays = !this.showMissingDays;
+    this.setGraphData();
   }
 }

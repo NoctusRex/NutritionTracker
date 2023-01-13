@@ -1,14 +1,17 @@
 <ion-header>
-  <app-header [component]="this" [canGoBack]="false" [canSubmit]="false"
-    title="pages.tabs.history.header.TITLE"></app-header>
-  <ion-toolbar color="secondary">
-    <ion-item lines="none" button detail="true" detail-icon="swap-horizontal" (click)="changeGraphSelection()">
+  <app-header [component]="this" [canGoBack]="false" [canSubmit]="false" title="pages.tabs.history.header.TITLE">
+    <ion-button (click)="toggleShowMissingDays()"><ion-icon slot="icon-only"
+        [name]="showMissingDays ? 'eye' : 'eye-off'"></ion-icon></ion-button>
+  </app-header>
+  <ion-toolbar>
+    <ion-item class="ion-no-margin" lines="none" button (click)="changeGraphSelection()">
       <ion-label class="ion-text-center">
         <h1><strong>{{ getSelectionText$() | async }}</strong></h1>
         <p>{{ getGraphInformationText() | translate }}</p>
       </ion-label>
     </ion-item>
-    <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
+    <plotly-plot class="ion-margin-start" [data]="graph.data" [layout]="graph.layout"
+      [config]="graph.config"></plotly-plot>
   </ion-toolbar>
 </ion-header>
 

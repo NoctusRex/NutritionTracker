@@ -1,0 +1,43 @@
+<ion-header>
+    <app-header [component]="this" title="pages.modals.history-filter.header.TITLE" [disableSubmit]="!canSubmit()">
+    </app-header>
+</ion-header>
+
+<ion-content>
+    <app-content-wrapper [padding]="2">
+        <ion-card>
+            <ion-card-header>
+                <ion-item lines="none">
+                    <ion-label>
+                        <h1>{{ "pages.modals.history-filter.content.FILTER_TITLE" | translate
+                            }}</h1>
+                    </ion-label>
+                </ion-item>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-grid class="ion-no-padding">
+                    <ion-row>
+                        <ion-col>
+                            <ion-item lines="full">
+                                <ion-icon slot="start" name="chevron-forward"
+                                    [color]="canSubmit() ? 'success' : 'danger'"></ion-icon>
+                                <ion-input type="date" [(ngModel)]="min"></ion-input>
+                                <ion-button slot="end"><ion-icon slot="icon-only"
+                                        name="calendar"></ion-icon></ion-button>
+                            </ion-item>
+
+                            <ion-item lines="full">
+                                <ion-icon slot="start" name="chevron-back"
+                                    [color]="canSubmit() ? 'success' : 'danger'"></ion-icon>
+                                <ion-input type="date" [(ngModel)]="max"></ion-input>
+                                <ion-button slot="end"><ion-icon slot="icon-only"
+                                        name="calendar"></ion-icon></ion-button>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+    </app-content-wrapper>
+</ion-content>

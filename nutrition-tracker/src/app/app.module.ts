@@ -17,6 +17,7 @@ import { ComponentsModule } from './core/components/component.module';
 import { FoodModalPageComponent } from './pages/modals/food/food-modal.page';
 import { FoodUnitModalPageComponent } from './pages/modals/food-unit/food-unit-modal.page';
 import { FoodQuantityModalPageComponent } from './pages/modals/food-quantity/food-quantity-modal.page';
+import { HistoryFilterModalPageComponent } from './pages/modals/history-filter/history-filter-modal.page';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient, baseHref: string) {
@@ -45,6 +46,7 @@ function initializeAppFactory(
     FoodModalPageComponent,
     FoodUnitModalPageComponent,
     FoodQuantityModalPageComponent,
+    HistoryFilterModalPageComponent,
   ],
   imports: [
     BrowserModule,

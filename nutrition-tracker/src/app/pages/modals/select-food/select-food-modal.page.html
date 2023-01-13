@@ -26,8 +26,9 @@
         </ng-template>
 
         <ion-list *ngIf="(items?.length ?? 0 > 0); else noValues">
-            <ion-item-sliding *ngFor="let item of getFilteredItems()">
-                <ion-item lines="full" detail="true" button (click)="selectItem(item)">
+            <ion-item-sliding *ngFor="let item of getFilteredItems(); index as i">
+                <ion-item lines="full" detail="true" button (click)="selectItem(item)"
+                    [color]="i % 2 === 0 ? 'table-row-two' : 'table-row-one'">
                     <ion-icon slot="start" name="fast-food"></ion-icon>
                     <ion-label>
                         <h3>{{ item.id }}</h3>
