@@ -8,6 +8,23 @@
       <ion-card-header>
         <ion-item>
           <ion-label>
+            <h1>{{ "pages.settings.content.APP_INFO_TITLE" | translate }}</h1>
+          </ion-label>
+        </ion-item>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-label>{{ 'pages.settings.content.VERSION' | translate }}</ion-label>
+          <ion-label class="ion-text-end">{{ version }}</ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-item>
+          <ion-label>
             <h1>{{ "pages.settings.content.SETTINGS_TITLE" | translate }}</h1>
           </ion-label>
         </ion-item>
@@ -27,6 +44,23 @@
             <ion-select-option *ngFor="let h of hours" [value]="h">{{ h }}</ion-select-option>
           </ion-select>
         </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-item>
+          <ion-label>
+            <h1>{{ "pages.settings.content.BACKUP_TITLE" | translate }}</h1>
+          </ion-label>
+        </ion-item>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-button expand="block" (click)="backup()"><ion-icon slot="start" name="cloud-download"></ion-icon> {{
+          'pages.settings.content.BACKUP' | translate }}</ion-button>
+
+        <app-file-upload (fileUploaded)="restore($event)"></app-file-upload>
       </ion-card-content>
     </ion-card>
   </app-content-wrapper>

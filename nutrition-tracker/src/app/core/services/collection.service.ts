@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { first, isEmpty } from 'lodash-es';
+import { first, isEmpty, last } from 'lodash-es';
 import {
   BehaviorSubject,
   catchError,
@@ -10,8 +10,9 @@ import {
   Observable,
   of,
   take,
-  tap,
+  last as rxjs_last,
   toArray,
+  tap,
 } from 'rxjs';
 import { PouchDbService } from './pouch-db.service';
 
@@ -122,6 +123,26 @@ export abstract class CollectionService<T extends Partial<{ id: string }>> {
       take(1),
       map((values) => {
         return first(values.filter((x) => x.id === id)) as T;
+      })
+    );
+  }
+
+  clear$(): Observable<void> {
+    console.log('Collection service - clear', this.key);
+
+    if (isEmpty(this._values$.value))
+      return of(null).pipe(
+        map(() => {
+          return;
+        })
+      );
+
+    return from(this._values$.value).pipe(
+      concatMap((value) => this.remove$(value)),
+      rxjs_last(),
+      map(() => {
+        this._values$.next([]);
+        return;
       })
     );
   }

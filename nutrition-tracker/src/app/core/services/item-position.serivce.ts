@@ -39,10 +39,6 @@ export class ItemPositionService extends CollectionService<ItemPosition> {
     );
   }
 
-  protected override beforeRefresh$(): Observable<void> {
-    return this.itemService.refresh$();
-  }
-
   protected override modifyRefreshValue$(
     value: ItemPosition
   ): Observable<ItemPosition> {

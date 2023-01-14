@@ -7,6 +7,26 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { ApplicationConfigurationService } from 'src/app/core/services/application-configuration.service';
 import { SETTINGS_STORAGE_KEY } from 'src/app/core/consts/storage-keys.const';
 import { Settings } from 'src/app/core/models/settings.model';
+import { ItemService } from 'src/app/core/services/item.service';
+import { ItemPositionService } from 'src/app/core/services/item-position.serivce';
+import {
+  catchError,
+  concatMap,
+  forkJoin,
+  from,
+  last,
+  of,
+  take,
+  tap,
+} from 'rxjs';
+import { File } from '@ionic-native/file';
+import moment from 'moment';
+import { Capacitor } from '@capacitor/core';
+import { saveAs } from 'file-saver';
+import { ItemPosition } from 'src/app/core/models/item-position.model';
+import { Item } from 'src/app/core/models/item.model';
+import { get, isEmpty } from 'lodash-es';
+import { ToastService } from 'src/app/core/services/toast.service';
 
 @Component({
   selector: 'app-settings',
@@ -20,13 +40,17 @@ export class SettingsPage extends BaseComponent implements OnInit {
     22, 23, 24,
   ];
   hour!: number;
+  version!: string;
 
   constructor(
     router: Router,
     location: Location,
     private storageService: StorageService,
     private translationService: TranslationService,
-    private applicationConfigurationService: ApplicationConfigurationService
+    private applicationConfigurationService: ApplicationConfigurationService,
+    private itemService: ItemService,
+    private itemPositionService: ItemPositionService,
+    private toastService: ToastService
   ) {
     super(router, location);
   }
@@ -39,6 +63,7 @@ export class SettingsPage extends BaseComponent implements OnInit {
 
     const settings = this.getSettings();
     this.hour = settings.resetHour!;
+    this.version = this.applicationConfigurationService.configuration.version;
   }
 
   onLanguageChange(ev: any): void {
@@ -55,6 +80,90 @@ export class SettingsPage extends BaseComponent implements OnInit {
     this.storageService.setItem(SETTINGS_STORAGE_KEY, settings);
   }
 
+  backup(): void {
+    forkJoin([
+      this.itemService.values$.pipe(take(1)),
+      this.itemPositionService.values$.pipe(take(1)),
+    ])
+      .pipe(
+        concatMap(([items, positions]) => {
+          const json: string = JSON.stringify({ items, positions });
+          const fileName = `nutrition-tracker-backup-${moment().format(
+            'DDMMYYYY'
+          )}.json`;
+
+          if (Capacitor.getPlatform() === 'web') {
+            this.downloadFile(json, fileName);
+            return of(null);
+          }
+
+          return of(
+            File.writeFile(File.externalDataDirectory, fileName, json, {
+              replace: true,
+            })
+          );
+        })
+      )
+      .subscribe();
+  }
+
+  downloadFile(json: string, fileName: string) {
+    const blob = new Blob([json], { type: 'text/json' });
+    saveAs(blob, fileName);
+  }
+
+  restore(file: File): void {
+    try {
+      let fileReader = new FileReader();
+      fileReader.onload = (_e) => {
+        try {
+          const values = JSON.parse(fileReader.result as string) as {
+            items: Array<Item>;
+            positions: Array<ItemPosition>;
+          };
+
+          if (!values || !get(values, 'items') || !get(values, 'positions'))
+            return;
+
+          forkJoin([
+            this.itemService.clear$().pipe(
+              concatMap(() => from(values.items)),
+              concatMap((item) => this.itemService.add$(item)),
+              last()
+            ),
+            this.itemPositionService.clear$().pipe(
+              concatMap(() => from(values.positions)),
+              concatMap((position) => this.itemPositionService.add$(position)),
+              last()
+            ),
+          ])
+            .pipe(
+              concatMap(() =>
+                this.translationService.translate$(
+                  'pages.settings.content.RESTORE_SUCCESS'
+                )
+              ),
+              catchError((error) => {
+                console.error(error);
+                this.showErrorToast(error.message);
+                return of(null);
+              })
+            )
+            .subscribe((sucessMessage) => {
+              if (isEmpty(sucessMessage) || sucessMessage === null) return;
+
+              this.toastService.show(sucessMessage, { color: 'success' });
+            });
+        } catch (error: any) {
+          this.showErrorToast(error.message);
+        }
+      };
+      fileReader.readAsText(file);
+    } catch (error: any) {
+      this.showErrorToast(error.message);
+    }
+  }
+
   override goBack(): void {
     this.navigate('dashboard');
   }
@@ -64,5 +173,9 @@ export class SettingsPage extends BaseComponent implements OnInit {
       language: this.language,
       resetHour: 24,
     });
+  }
+
+  private showErrorToast(message: string): void {
+    this.toastService.show(message, { color: 'danger' });
   }
 }

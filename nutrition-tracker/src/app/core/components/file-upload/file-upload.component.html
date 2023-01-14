@@ -1,0 +1,9 @@
+<ion-item class="ion-no-margin ion-no-padding" lines="none">
+    <ion-label>
+        <input type="file" accept=".json" (change)="onChange($event)">
+    </ion-label>
+    <ion-button slot="start" (click)="onUpload()">
+        <ion-icon slot="start" name="cloud-upload"></ion-icon>
+        {{ 'core.components.file-upload.RESTORE' | translate }}
+    </ion-button>
+</ion-item>

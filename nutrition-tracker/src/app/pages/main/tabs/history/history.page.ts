@@ -176,6 +176,9 @@ export class HistoryPage extends BaseComponent implements OnInit {
             { showarrow: false, text, align: 'center' },
           ];
         });
+
+      // don't display anything on x
+      (this.graph.data[0].x as any).push('');
       return;
     }
 
@@ -188,6 +191,9 @@ export class HistoryPage extends BaseComponent implements OnInit {
             { showarrow: false, text, align: 'center' },
           ];
         });
+
+      // don't display anything on x
+      (this.graph.data[0].x as any).push('');
       return;
     }
 
@@ -255,7 +261,10 @@ export class HistoryPage extends BaseComponent implements OnInit {
       case 'filter':
         return this.translationService.translate$(
           'pages.tabs.history.content.SELECTION_TEXT_FILTER',
-          { min: 'x-x-x', max: 'x-x-x' }
+          {
+            min: moment(this.min).format('DD.MM.YYYY'),
+            max: moment(this.max).format('DD.MM.YYYY'),
+          }
         );
       default:
         return this.translationService.translate$(

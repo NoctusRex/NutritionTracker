@@ -1,6 +1,6 @@
 {
   "name": "nutrition-tracker",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Noctus Rex",
   "scripts": {
     "ng": "ng",
@@ -24,11 +24,15 @@
     "@capacitor/haptics": "4.1.0",
     "@capacitor/keyboard": "4.1.0",
     "@capacitor/status-bar": "4.1.1",
+    "@ionic-native/core": "^5.36.0",
+    "@ionic-native/file": "^5.36.0",
     "@ionic/angular": "^6.1.9",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
+    "@types/file-saver": "^2.0.5",
     "@types/pouchdb": "^6.4.0",
     "angular-plotly.js": "^4.0.4",
+    "file-saver": "^2.0.5",
     "ionicons": "^6.0.3",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",

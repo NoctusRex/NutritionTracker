@@ -23,16 +23,12 @@
                                 <ion-icon slot="start" name="chevron-forward"
                                     [color]="canSubmit() ? 'success' : 'danger'"></ion-icon>
                                 <ion-input type="date" [(ngModel)]="min"></ion-input>
-                                <ion-button slot="end"><ion-icon slot="icon-only"
-                                        name="calendar"></ion-icon></ion-button>
                             </ion-item>
 
                             <ion-item lines="full">
                                 <ion-icon slot="start" name="chevron-back"
                                     [color]="canSubmit() ? 'success' : 'danger'"></ion-icon>
                                 <ion-input type="date" [(ngModel)]="max"></ion-input>
-                                <ion-button slot="end"><ion-icon slot="icon-only"
-                                        name="calendar"></ion-icon></ion-button>
                             </ion-item>
                         </ion-col>
                     </ion-row>

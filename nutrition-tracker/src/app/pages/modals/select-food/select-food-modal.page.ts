@@ -4,7 +4,7 @@ import { BaseComponent } from 'src/app/core/components/base-component/base.compo
 import { Location } from '@angular/common';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { ItemService } from 'src/app/core/services/item.service';
-import { concatMap, map, Observable } from 'rxjs';
+import { concatMap, interval, map, Observable, take, throttle } from 'rxjs';
 import { Item } from 'src/app/core/models/item.model';
 import { FoodModalPageComponent } from '../food/food-modal.page';
 import { cloneDeep, isEmpty } from 'lodash';
@@ -30,6 +30,10 @@ export class SelectFoodModalPageComponent
   }
 
   ngOnInit(): void {
+    this.refresh();
+  }
+
+  refresh(): void {
     this.itemService.values$.subscribe((x) => (this.items = x));
   }
 

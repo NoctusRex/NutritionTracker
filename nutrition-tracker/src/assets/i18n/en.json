@@ -11,6 +11,9 @@
         "PROTEIN": "Protein",
         "SODIUM": "Sodium",
         "FIBER": "Fiber"
+      },
+      "file-upload": {
+        "RESTORE": "Restore"
       }
     }
   },
@@ -105,7 +108,12 @@
       "content": {
         "SETTINGS_TITLE": "Settings",
         "LANGUAGE": "Language",
-        "RESET_TIME": "Today Eaten Reset Hour"
+        "RESET_TIME": "Today Eaten Reset Hour",
+        "BACKUP_TITLE": "Backup and Restore",
+        "BACKUP": "Backup",
+        "APP_INFO_TITLE": "App Information",
+        "VERSION": "Version",
+        "RESTORE_SUCCESS": "Data restored."
       }
     }
   }
