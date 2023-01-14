@@ -92,10 +92,10 @@ export class SettingsPage extends BaseComponent implements OnInit {
             'DDMMYYYY'
           )}.json`;
 
-          if (Capacitor.getPlatform() === 'web') {
-            this.downloadFile(json, fileName);
-            return of(null);
-          }
+          // if (Capacitor.getPlatform() === 'web') {
+          this.downloadFile(json, fileName);
+          return of(null);
+          // }
 
           return of(
             File.writeFile(File.externalDataDirectory, fileName, json, {
