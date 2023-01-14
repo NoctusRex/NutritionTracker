@@ -7,7 +7,7 @@ import { ItemService } from 'src/app/core/services/item.service';
 import { concatMap, interval, map, Observable, take, throttle } from 'rxjs';
 import { Item } from 'src/app/core/models/item.model';
 import { FoodModalPageComponent } from '../food/food-modal.page';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash-es';
 
 @Component({
   selector: 'app-select-food-modal-page',

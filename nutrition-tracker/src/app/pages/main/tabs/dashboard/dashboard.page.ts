@@ -11,7 +11,7 @@ import { ModalService } from 'src/app/core/services/modal.service';
 import { SelectFoodModalPageComponent } from 'src/app/pages/modals/select-food/select-food-modal.page';
 import { FoodQuantityModalPageComponent } from 'src/app/pages/modals/food-quantity/food-quantity-modal.page';
 import { Item } from 'src/app/core/models/item.model';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import moment from 'moment';
 import { ItemService } from 'src/app/core/services/item.service';
 

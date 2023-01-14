@@ -14,7 +14,7 @@ import {
   map as _map,
   orderBy,
   take,
-} from 'lodash';
+} from 'lodash-es';
 import { Layout } from 'plotly.js';
 import { Config, PlotData } from 'plotly.js-dist-min';
 import moment from 'moment';
