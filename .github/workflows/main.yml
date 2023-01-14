@@ -31,7 +31,7 @@ jobs:
 
       - name: Install app dependencies
         working-directory: ./nutrition-tracker/
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Convert Windows line endings to Linux from the gradlew file
         working-directory: ./nutrition-tracker/
