@@ -102,9 +102,23 @@ export class SettingsPage extends BaseComponent implements OnInit {
               replace: true,
             })
           );
+        }),
+        concatMap(() =>
+          this.translationService.translate$(
+            'pages.settings.content.BACKUP_SUCCESS'
+          )
+        ),
+        catchError((error) => {
+          console.error(error);
+          this.showErrorToast(error.message);
+          return of(null);
         })
       )
-      .subscribe();
+      .subscribe((sucessMessage) => {
+        if (isEmpty(sucessMessage) || sucessMessage === null) return;
+
+        this.toastService.show(sucessMessage, { color: 'success' });
+      });
   }
 
   downloadFile(json: string, fileName: string) {
