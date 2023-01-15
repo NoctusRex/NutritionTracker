@@ -19,7 +19,6 @@ import {
   take,
   tap,
 } from 'rxjs';
-import { File } from '@ionic-native/file';
 import moment from 'moment';
 import { Capacitor } from '@capacitor/core';
 import { saveAs } from 'file-saver';
@@ -27,6 +26,7 @@ import { ItemPosition } from 'src/app/core/models/item-position.model';
 import { Item } from 'src/app/core/models/item.model';
 import { get, isEmpty } from 'lodash-es';
 import { ToastService } from 'src/app/core/services/toast.service';
+import { Share } from '@capacitor/share';
 
 @Component({
   selector: 'app-settings',
@@ -97,15 +97,12 @@ export class SettingsPage extends BaseComponent implements OnInit {
             return of(null);
           }
 
-          return of(
-            File.writeFile(
-              File.externalRootDirectory + '/Download/',
-              fileName,
-              json,
-              {
-                replace: true,
-              }
-            )
+          return from(
+            Share.share({
+              title: 'Nutrition Tracker Backup',
+              text: json,
+              dialogTitle: 'Share backed up data',
+            })
           );
         }),
         concatMap(() =>
