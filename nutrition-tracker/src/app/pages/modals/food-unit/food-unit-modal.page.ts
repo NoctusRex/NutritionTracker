@@ -86,15 +86,16 @@ export class FoodUnitModalPageComponent
         map((is) => {
           const units = cloneDeep(this.item.units);
           units.push(cloneDeep(this.unitOfMeasure));
-          const value = 100;
           const baseUnit = this.item.units.find((x) => x.isBase)?.id!;
           const quantity = this.unitOfMeasureUtils.convertTo(
-            { unit: baseUnit, value: value },
-            this.unitOfMeasure.id,
+            { unit: this.unitOfMeasure.id, value: 1 },
+            baseUnit,
             units
           );
 
-          return `${value} ${baseUnit} ${is} ${quantity.value} ${quantity.unit}`;
+          return `${1} ${this.unitOfMeasure.id} ${is} ${quantity.value} ${
+            quantity.unit
+          }`;
         })
       );
   }

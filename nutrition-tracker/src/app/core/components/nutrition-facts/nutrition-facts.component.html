@@ -55,18 +55,18 @@
             <ion-row>
                 <ion-col>
                     <ion-item lines="full" color="table-row-one">
-                        <ion-label><strong>{{ "core.components.nutrition-facts.PROTEIN" | translate
+                        <ion-label><strong>{{ "core.components.nutrition-facts.FIBER" | translate
                                 }}</strong></ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.protein }} g</ion-label>
+                        <ion-label class="ion-text-end">{{ nutritionFacts?.fiber }} g</ion-label>
                     </ion-item>
                 </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col>
                     <ion-item lines="full" color="table-row-two">
-                        <ion-label><strong>{{ "core.components.nutrition-facts.FIBER" | translate
+                        <ion-label><strong>{{ "core.components.nutrition-facts.PROTEIN" | translate
                                 }}</strong></ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.fiber }} g</ion-label>
+                        <ion-label class="ion-text-end">{{ nutritionFacts?.protein }} g</ion-label>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -164,23 +164,6 @@
                 <ion-col>
                     <ion-item lines="full">
                         <ion-label><strong>{{
-                                "core.components.nutrition-facts.PROTEIN" |
-                                translate }}</strong></ion-label>
-                        <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.protein)" color="danger"
-                            name="alert-circle"></ion-icon>
-                        <ion-icon slot="start" *ngIf="isValueValid(nutritionFacts.protein)" color="success"
-                            name="checkmark-circle"></ion-icon>
-                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.protein"
-                            type="number"
-                            [placeholder]="'core.components.nutrition-facts.PROTEIN' | translate"></ion-input>
-                        <ion-label class="ion-text-end">g</ion-label>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <ion-item lines="full">
-                        <ion-label><strong>{{
                                 "core.components.nutrition-facts.FIBER" |
                                 translate }}</strong></ion-label>
                         <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.fiber)" color="danger"
@@ -190,6 +173,23 @@
                         <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.fiber"
                             type="number"
                             [placeholder]="'core.components.nutrition-facts.FIBER' | translate"></ion-input>
+                        <ion-label class="ion-text-end">g</ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item lines="full">
+                        <ion-label><strong>{{
+                                "core.components.nutrition-facts.PROTEIN" |
+                                translate }}</strong></ion-label>
+                        <ion-icon slot="start" *ngIf="!isValueValid(nutritionFacts.protein)" color="danger"
+                            name="alert-circle"></ion-icon>
+                        <ion-icon slot="start" *ngIf="isValueValid(nutritionFacts.protein)" color="success"
+                            name="checkmark-circle"></ion-icon>
+                        <ion-input class="ion-text-end ion-padding-end" [(ngModel)]="nutritionFacts!.protein"
+                            type="number"
+                            [placeholder]="'core.components.nutrition-facts.PROTEIN' | translate"></ion-input>
                         <ion-label class="ion-text-end">g</ion-label>
                     </ion-item>
                 </ion-col>

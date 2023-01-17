@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/core/components/base-component/base.component';
 import { Location } from '@angular/common';
-import { map, Observable, of } from 'rxjs';
+import { forkJoin, map, Observable, of } from 'rxjs';
 import { ItemPosition } from 'src/app/core/models/item-position.model';
 import { ItemPositionService } from 'src/app/core/services/item-position.serivce';
 import {
@@ -28,13 +28,17 @@ import { HistoryFilterModalPageComponent } from 'src/app/pages/modals/history-fi
 })
 export class HistoryPage extends BaseComponent implements OnInit {
   selection: 'filter' | 'all' | 'month' | 'week' = 'month';
-  currentGraphInformation: string = 'calories';
+  currentGraphInformation:
+    | 'calories'
+    | 'totalFat'
+    | 'totalCarbohydrate'
+    | 'protein'
+    | 'sodium'
+    | 'fiber' = 'calories';
   graphInformation: Array<string> = [
     'calories',
     'totalFat',
-    'saturatedFat',
     'totalCarbohydrate',
-    'sugar',
     'protein',
     'sodium',
     'fiber',
@@ -45,13 +49,9 @@ export class HistoryPage extends BaseComponent implements OnInit {
   max: string = '';
 
   graph = {
-    data: [
-      {
-        type: 'bar',
-      } as PlotData,
-    ],
+    data: [{} as PlotData],
     layout: {
-      margin: { b: 65, l: 10, t: 10, r: 10 },
+      margin: { b: 65, l: 10, t: 0, r: 10 },
       yaxis: { visible: false },
     } as Partial<Layout>,
     config: {
@@ -135,12 +135,47 @@ export class HistoryPage extends BaseComponent implements OnInit {
   }
 
   private setGraphData(): void {
+    this.graph.data = [{} as any];
     this.graph.data[0].x = [];
     this.graph.data[0].y = [];
     this.graph.data[0].text = [];
+    this.graph.data[0].type = 'bar';
     this.graph.layout.width = this.getWidth();
     this.graph.layout.height = this.getHeigth();
     this.graph.layout.annotations = [];
+    this.graph.layout.barmode = undefined;
+
+    if (
+      this.currentGraphInformation === 'totalFat' ||
+      this.currentGraphInformation === 'totalCarbohydrate'
+    ) {
+      this.graph.layout.barmode = 'stack';
+      if (this.graph.data.length === 1) {
+        this.graph.data = [...this.graph.data, {} as any];
+        this.graph.data[1].x = [];
+        this.graph.data[1].y = [];
+        this.graph.data[1].text = [];
+        this.graph.data[1].type = 'bar';
+        this.graph.data[1].marker = { color: 'rgb(31, 119, 180' };
+        this.graph.data[0].marker = { color: 'rgb(100, 120, 180' };
+      }
+
+      forkJoin([
+        this.translationService.translate$(
+          this.currentGraphInformation === 'totalFat'
+            ? 'pages.tabs.history.content.GRAPH_INFORMATION_TOTALFAT'
+            : 'pages.tabs.history.content.GRAPH_INFORMATION_TOTALCARBOHYDRATE'
+        ),
+        this.translationService.translate$(
+          this.currentGraphInformation === 'totalFat'
+            ? 'pages.tabs.history.content.GRAPH_INFORMATION_SATURATEDFAT'
+            : 'pages.tabs.history.content.GRAPH_INFORMATION_SUGAR'
+        ),
+      ]).subscribe(([text1, text2]) => {
+        this.graph.data[0].name = text2;
+        this.graph.data[1].name = text1;
+      });
+    }
 
     const maxDate = new Date(first(this.groups)?.date!);
     const minDate = new Date(last(this.groups)?.date!);
@@ -199,11 +234,51 @@ export class HistoryPage extends BaseComponent implements OnInit {
 
     filledGroups.forEach((group) => {
       const total = this.itemPositionService.getTotal(group.positions);
-      const value: number = get(total, this.currentGraphInformation);
+      let value = 0;
 
-      (this.graph.data[0].x as any).push(moment(group.date).format('DD.MM.YY')); // the "ㅤ" is important!
-      (this.graph.data[0].y as any).push(value!);
-      (this.graph.data[0] as any).text.push(value!.toString());
+      if (this.currentGraphInformation === 'totalFat') {
+        value = total.totalFat || 0;
+
+        (this.graph.data[1].x as any).push(
+          moment(group.date).format('DD.MM.YY')
+        );
+        (this.graph.data[1].y as any).push(value - (total.saturatedFat || 0));
+        (this.graph.data[1] as any).text.push(value.toString());
+
+        value = total.saturatedFat || 0;
+
+        (this.graph.data[0].x as any).push(
+          moment(group.date).format('DD.MM.YY')
+        );
+        (this.graph.data[0].y as any).push(value);
+        (this.graph.data[0] as any).text.push(value.toString());
+
+        return;
+      }
+
+      if (this.currentGraphInformation === 'totalCarbohydrate') {
+        value = total.totalCarbohydrate || 0;
+
+        (this.graph.data[1].x as any).push(
+          moment(group.date).format('DD.MM.YY')
+        );
+        (this.graph.data[1].y as any).push(value - (total.sugar || 0));
+        (this.graph.data[1] as any).text.push(value.toString());
+
+        value = total.sugar || 0;
+        (this.graph.data[0].x as any).push(
+          moment(group.date).format('DD.MM.YY')
+        );
+        (this.graph.data[0].y as any).push(value);
+        (this.graph.data[0] as any).text.push(value.toString());
+        return;
+      }
+
+      value = get(total, this.currentGraphInformation, 0);
+
+      (this.graph.data[0].x as any).push(moment(group.date).format('DD.MM.YY'));
+      (this.graph.data[0].y as any).push(value);
+      (this.graph.data[0] as any).text.push(value.toString());
     });
   }
 
@@ -235,7 +310,7 @@ export class HistoryPage extends BaseComponent implements OnInit {
       this.graphInformation.indexOf(this.currentGraphInformation) + 1;
     if (nextIndex >= this.graphInformation.length) nextIndex = 0;
 
-    this.currentGraphInformation = this.graphInformation[nextIndex];
+    this.currentGraphInformation = this.graphInformation[nextIndex] as any;
 
     this.setGraphData();
   }
