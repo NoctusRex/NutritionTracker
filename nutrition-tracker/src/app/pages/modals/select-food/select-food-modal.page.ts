@@ -42,8 +42,8 @@ export class SelectFoodModalPageComponent
       if (isEmpty(this.filterText)) return true;
 
       return (
-        item.id.includes(this.filterText) ||
-        item.description.includes(this.filterText)
+        item.id.toLowerCase().includes(this.filterText.toLowerCase()) ||
+        item.description.toLowerCase().includes(this.filterText.toLowerCase())
       );
     });
   }

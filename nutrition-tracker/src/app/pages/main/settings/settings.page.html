@@ -37,13 +37,6 @@
             <ion-select-option *ngFor="let l of languages" [value]="l">{{ l }}</ion-select-option>
           </ion-select>
         </ion-item>
-
-        <ion-item>
-          <ion-label> {{ 'pages.settings.content.RESET_TIME' | translate }} </ion-label>
-          <ion-select [disabled]="true" [(ngModel)]="hour" interface="popover" (ionChange)="onHourChange($event)">
-            <ion-select-option *ngFor="let h of hours" [value]="h">{{ h }}</ion-select-option>
-          </ion-select>
-        </ion-item>
       </ion-card-content>
     </ion-card>
 

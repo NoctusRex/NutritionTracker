@@ -1,86 +1,98 @@
 <ion-card>
+
     <ion-card-header>
-        <ion-item lines="none" [button]="!enableInput" (click)="toggleDetails()">
-            <ion-label *ngIf="nutritionFactsComponent.showDetails || enableInput">
+        <ion-accordion-group *ngIf="!enableInput">
+            <ion-accordion toggleIcon="caret-down-circle">
+                <ion-item slot="header" color="light" (click)="toggleDetails()" color="">
+                    <ion-label *ngIf="nutritionFactsComponent.showDetails || enableInput">
+                        <h1>{{ "core.components.nutrition-facts.TITLE" | translate }}</h1>
+                    </ion-label>
+                    <ion-label *ngIf="!nutritionFactsComponent.showDetails && !enableInput">
+                        <h1>{{ nutritionFacts?.calories }} kcal</h1>
+                    </ion-label>
+                </ion-item>
+                <div class="ion-padding-top" slot="content">
+                    <ion-grid class="ion-no-padding">
+                        <ion-row>
+                            <ion-col>
+                                <ion-item lines="full" color="table-row-two">
+                                    <ion-label><strong>{{ "core.components.nutrition-facts.CALORIES" | translate
+                                            }}</strong></ion-label>
+                                    <ion-label class="ion-text-end">{{ nutritionFacts?.calories }} kcal</ion-label>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col color="table-row-two">
+                                <ion-item lines="none" color="table-row-one">
+                                    <ion-label><strong>{{ "core.components.nutrition-facts.TOTAL_FAT" | translate
+                                            }}</strong></ion-label>
+                                    <ion-label class="ion-text-end">{{ nutritionFacts?.totalFat }} g</ion-label>
+                                </ion-item>
+                                <ion-item lines="full" color="table-row-one">
+                                    <ion-label class="ion-padding-start">{{
+                                        "core.components.nutrition-facts.SATURATED_FAT"
+                                        |
+                                        translate }}</ion-label>
+                                    <ion-label class="ion-text-end">{{ nutritionFacts?.saturatedFat }} g</ion-label>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col color="table-row-two">
+                                <ion-item lines="none" color="table-row-two">
+                                    <ion-label><strong>{{ "core.components.nutrition-facts.TOTAL_CARBOHYDRATE" |
+                                            translate
+                                            }}</strong></ion-label>
+                                    <ion-label class="ion-text-end">{{ nutritionFacts?.totalCarbohydrate }}
+                                        g</ion-label>
+                                </ion-item>
+                                <ion-item lines="full" color="table-row-two">
+                                    <ion-label class="ion-padding-start">{{ "core.components.nutrition-facts.SUGAR" |
+                                        translate
+                                        }}</ion-label>
+                                    <ion-label class="ion-text-end">{{ nutritionFacts?.sugar }} g</ion-label>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item lines="full" color="table-row-one">
+                                    <ion-label><strong>{{ "core.components.nutrition-facts.FIBER" | translate
+                                            }}</strong></ion-label>
+                                    <ion-label class="ion-text-end">{{ nutritionFacts?.fiber }} g</ion-label>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item lines="full" color="table-row-two">
+                                    <ion-label><strong>{{ "core.components.nutrition-facts.PROTEIN" | translate
+                                            }}</strong></ion-label>
+                                    <ion-label class="ion-text-end">{{ nutritionFacts?.protein }} g</ion-label>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item lines="full" color="table-row-one">
+                                    <ion-label><strong>{{ "core.components.nutrition-facts.SODIUM" | translate
+                                            }}</strong></ion-label>
+                                    <ion-label class="ion-text-end">{{ nutritionFacts?.sodium }} g</ion-label>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+
+        <ion-item lines="none" *ngIf="enableInput">
+            <ion-label>
                 <h1>{{ "core.components.nutrition-facts.TITLE" | translate }}</h1>
             </ion-label>
-            <ion-label *ngIf="!nutritionFactsComponent.showDetails && !enableInput">
-                <h1>{{ nutritionFacts?.calories }} kcal</h1>
-            </ion-label>
-            <ion-icon *ngIf="!enableInput" slot="end"
-                [name]="nutritionFactsComponent.showDetails ? 'caret-up-circle' : 'caret-down-circle'"
-                color="dark"></ion-icon>
         </ion-item>
     </ion-card-header>
-
-    <ion-card-content *ngIf="!enableInput && nutritionFactsComponent.showDetails">
-        <ion-grid class="ion-no-padding">
-            <ion-row>
-                <ion-col>
-                    <ion-item lines="full" color="table-row-two">
-                        <ion-label><strong>{{ "core.components.nutrition-facts.CALORIES" | translate
-                                }}</strong></ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.calories }} kcal</ion-label>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col color="table-row-two">
-                    <ion-item lines="none" color="table-row-one">
-                        <ion-label><strong>{{ "core.components.nutrition-facts.TOTAL_FAT" | translate
-                                }}</strong></ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.totalFat }} g</ion-label>
-                    </ion-item>
-                    <ion-item lines="full" color="table-row-one">
-                        <ion-label class="ion-padding-start">{{ "core.components.nutrition-facts.SATURATED_FAT" |
-                            translate }}</ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.saturatedFat }} g</ion-label>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col color="table-row-two">
-                    <ion-item lines="none" color="table-row-two">
-                        <ion-label><strong>{{ "core.components.nutrition-facts.TOTAL_CARBOHYDRATE" | translate
-                                }}</strong></ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.totalCarbohydrate }} g</ion-label>
-                    </ion-item>
-                    <ion-item lines="full" color="table-row-two">
-                        <ion-label class="ion-padding-start">{{ "core.components.nutrition-facts.SUGAR" | translate
-                            }}</ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.sugar }} g</ion-label>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <ion-item lines="full" color="table-row-one">
-                        <ion-label><strong>{{ "core.components.nutrition-facts.FIBER" | translate
-                                }}</strong></ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.fiber }} g</ion-label>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <ion-item lines="full" color="table-row-two">
-                        <ion-label><strong>{{ "core.components.nutrition-facts.PROTEIN" | translate
-                                }}</strong></ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.protein }} g</ion-label>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <ion-item lines="full" color="table-row-one">
-                        <ion-label><strong>{{ "core.components.nutrition-facts.SODIUM" | translate
-                                }}</strong></ion-label>
-                        <ion-label class="ion-text-end">{{ nutritionFacts?.sodium }} g</ion-label>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </ion-card-content>
 
     <ion-card-content *ngIf="enableInput && nutritionFacts">
         <ion-grid class="ion-no-padding">

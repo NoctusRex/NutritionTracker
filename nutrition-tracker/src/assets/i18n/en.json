@@ -44,6 +44,7 @@
           "GRAPH_INFORMATION_PROTEIN": "Protein",
           "GRAPH_INFORMATION_SODIUM": "Sodium",
           "GRAPH_INFORMATION_FIBER": "Fiber",
+          "GRAPH_INFORMATION_ALL": "All",
           "GRAPH_TO_MANY_ELEMENTS": "To many days to display.",
           "GRAPH_NO_ELEMENTS": "No days to display."
         }

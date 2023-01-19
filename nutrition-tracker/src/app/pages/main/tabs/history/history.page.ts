@@ -10,6 +10,7 @@ import {
   fill,
   first,
   get,
+  keys,
   last,
   map as _map,
   orderBy,
@@ -21,6 +22,17 @@ import moment from 'moment';
 import { TranslationService } from 'src/app/core/services/translation.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { HistoryFilterModalPageComponent } from 'src/app/pages/modals/history-filter/history-filter-modal.page';
+import { NutritionFactsComponent } from 'src/app/core/components/nutrition-facts/nutrition-facts.component';
+import { NutritionFacts } from 'src/app/core/models/nutrition-facts.model';
+
+type GraphInformation =
+  | 'calories'
+  | 'totalFat'
+  | 'totalCarbohydrate'
+  | 'protein'
+  | 'sodium'
+  | 'fiber'
+  | 'all';
 
 @Component({
   selector: 'app-history',
@@ -28,20 +40,16 @@ import { HistoryFilterModalPageComponent } from 'src/app/pages/modals/history-fi
 })
 export class HistoryPage extends BaseComponent implements OnInit {
   selection: 'filter' | 'all' | 'month' | 'week' = 'month';
-  currentGraphInformation:
-    | 'calories'
-    | 'totalFat'
-    | 'totalCarbohydrate'
-    | 'protein'
-    | 'sodium'
-    | 'fiber' = 'calories';
-  graphInformation: Array<string> = [
+
+  currentGraphInformation: GraphInformation = 'all';
+  graphInformation: Array<GraphInformation> = [
     'calories',
     'totalFat',
     'totalCarbohydrate',
     'protein',
     'sodium',
     'fiber',
+    'all',
   ];
   showMissingDays = false;
   groups!: Array<{ date: string; positions: Array<ItemPosition> }>;
@@ -51,7 +59,6 @@ export class HistoryPage extends BaseComponent implements OnInit {
   graph = {
     data: [{} as PlotData],
     layout: {
-      margin: { b: 65, l: 10, t: 0, r: 10 },
       yaxis: { visible: false },
     } as Partial<Layout>,
     config: {
@@ -59,7 +66,7 @@ export class HistoryPage extends BaseComponent implements OnInit {
       displaylogo: false,
       editable: false,
       responsive: true,
-      staticPlot: true,
+      staticPlot: false,
     } as Config,
   };
 
@@ -135,48 +142,13 @@ export class HistoryPage extends BaseComponent implements OnInit {
   }
 
   private setGraphData(): void {
-    this.graph.data = [{} as any];
-    this.graph.data[0].x = [];
-    this.graph.data[0].y = [];
-    this.graph.data[0].text = [];
-    this.graph.data[0].type = 'bar';
     this.graph.layout.width = this.getWidth();
     this.graph.layout.height = this.getHeigth();
     this.graph.layout.annotations = [];
     this.graph.layout.barmode = undefined;
-
-    if (
-      this.currentGraphInformation === 'totalFat' ||
-      this.currentGraphInformation === 'totalCarbohydrate'
-    ) {
-      this.graph.layout.barmode = 'stack';
-      if (this.graph.data.length === 1) {
-        this.graph.data = [...this.graph.data, {} as any];
-        this.graph.data[1].x = [];
-        this.graph.data[1].y = [];
-        this.graph.data[1].text = [];
-        this.graph.data[1].type = 'bar';
-        this.graph.data[1].marker = { color: 'rgb(31, 119, 180' };
-        this.graph.data[0].marker = { color: 'rgb(100, 120, 180' };
-      }
-
-      forkJoin([
-        this.translationService.translate$(
-          this.currentGraphInformation === 'totalFat'
-            ? 'pages.tabs.history.content.GRAPH_INFORMATION_TOTALFAT'
-            : 'pages.tabs.history.content.GRAPH_INFORMATION_TOTALCARBOHYDRATE'
-        ),
-        this.translationService.translate$(
-          this.currentGraphInformation === 'totalFat'
-            ? 'pages.tabs.history.content.GRAPH_INFORMATION_SATURATEDFAT'
-            : 'pages.tabs.history.content.GRAPH_INFORMATION_SUGAR'
-        ),
-      ]).subscribe(([text1, text2]) => {
-        this.graph.data[0].name = text2;
-        this.graph.data[1].name = text1;
-      });
-    }
-
+    this.graph.layout.yaxis = { visible: false };
+    this.graph.layout.legend = { orientation: 'v' };
+    this.graph.layout.margin = { b: 65, l: 10, t: 0, r: 10 };
     const maxDate = new Date(first(this.groups)?.date!);
     const minDate = new Date(last(this.groups)?.date!);
 
@@ -230,6 +202,103 @@ export class HistoryPage extends BaseComponent implements OnInit {
       // don't display anything on x
       (this.graph.data[0].x as any).push('');
       return;
+    }
+
+    if (this.currentGraphInformation === 'all') {
+      this.setScatterGraphData(filledGroups);
+      return;
+    }
+
+    this.setBarGraphData(filledGroups);
+  }
+
+  private setScatterGraphData(
+    filledGroups: Array<{
+      date: string;
+      positions: Array<ItemPosition>;
+    }>
+  ): void {
+    this.graph.data = [];
+    this.graph.layout.yaxis!.visible! = true;
+    this.graph.layout.legend = {
+      x: 1,
+      y: 0,
+      traceorder: 'normal',
+      orientation: 'v',
+    };
+    this.graph.layout.margin = { b: 65, l: 35, t: 10, r: 10 };
+
+    const objKeys = keys(filledGroups[0].positions[0].item.nutritionFacts);
+    objKeys.forEach(() => {
+      this.graph.data.push({
+        x: [],
+        y: [],
+        type: 'scatter',
+      } as any);
+    });
+
+    objKeys.forEach((key, index) => {
+      this.translationService
+        .translate$(
+          `pages.tabs.history.content.GRAPH_INFORMATION_${key.toUpperCase()}`
+        )
+        .subscribe((x) => (this.graph.data[index].name = x));
+    });
+
+    filledGroups.forEach((group) => {
+      const total = this.itemPositionService.getTotal(group.positions);
+
+      objKeys.forEach((key, index) => {
+        (this.graph.data[index].x as any).push(
+          moment(group.date).format('DD.MM.YY')
+        );
+        (this.graph.data[index].y as any).push(get(total, key, 0));
+      });
+    });
+  }
+
+  private setBarGraphData(
+    filledGroups: Array<{
+      date: string;
+      positions: Array<ItemPosition>;
+    }>
+  ): void {
+    this.graph.data = [{} as any];
+    this.graph.data[0].x = [];
+    this.graph.data[0].y = [];
+    this.graph.data[0].text = [];
+    this.graph.data[0].type = 'bar';
+
+    if (
+      this.currentGraphInformation === 'totalFat' ||
+      this.currentGraphInformation === 'totalCarbohydrate'
+    ) {
+      this.graph.layout.barmode = 'stack';
+      if (this.graph.data.length === 1) {
+        this.graph.data = [...this.graph.data, {} as any];
+        this.graph.data[1].x = [];
+        this.graph.data[1].y = [];
+        this.graph.data[1].text = [];
+        this.graph.data[1].type = 'bar';
+        this.graph.data[1].marker = { color: 'rgb(31, 119, 180' };
+        this.graph.data[0].marker = { color: 'rgb(100, 120, 180' };
+      }
+
+      forkJoin([
+        this.translationService.translate$(
+          this.currentGraphInformation === 'totalFat'
+            ? 'pages.tabs.history.content.GRAPH_INFORMATION_TOTALFAT'
+            : 'pages.tabs.history.content.GRAPH_INFORMATION_TOTALCARBOHYDRATE'
+        ),
+        this.translationService.translate$(
+          this.currentGraphInformation === 'totalFat'
+            ? 'pages.tabs.history.content.GRAPH_INFORMATION_SATURATEDFAT'
+            : 'pages.tabs.history.content.GRAPH_INFORMATION_SUGAR'
+        ),
+      ]).subscribe(([text1, text2]) => {
+        this.graph.data[0].name = text2;
+        this.graph.data[1].name = text1;
+      });
     }
 
     filledGroups.forEach((group) => {
